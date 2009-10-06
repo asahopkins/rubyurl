@@ -11,14 +11,14 @@ class LinksController < ApplicationController
 
   def create
     website_url = params.include?(:website_url) ? params[:website_url] : params[:link][:website_url]
-    @link = Link.find_or_create_by_website_url( website_url )
-    @link.ip_address = request.remote_ip if @link.new_record?
-    
-    if @link.save
+    @link = Link.find_or_create_by_url(website_url)
+    @link.ip_address = request.remote_ip if (@link and @link.new_record?)
+      
+    if @link and @link.save
       calculate_links # application controller, refactor soon
       render :action => :show
     else
-      flash[:warning] = 'There was an issue trying to create your RubyURL.'
+      flash[:warning] = 'There was an issue trying to create your TinyThom.as URL.'
       redirect_to :action => :invalid
     end
   end
@@ -28,9 +28,13 @@ class LinksController < ApplicationController
 
     unless @link.nil?
       @link.add_visit(request)
-      redirect_to @link.website_url, { :status => 301 }
+      redirect_to @link.thomas_permalink, { :status => 301 }
     else
       redirect_to :action => 'invalid'
     end
   end
+  
+  private
+  
+  
 end

@@ -1,0 +1,24 @@
+congressional record search:
+
+http://thomas.loc.gov/cgi-bin/query/D?r109:1:./temp/~r1092H0Oha::
+http://thomas.loc.gov/cgi-bin/query/C?r107:./temp/~r107rKP35Z
+
+bill search:
+
+http://thomas.loc.gov/cgi-bin/bdquery/D?d111:1:./temp/~bdT28J::|/bss/111search.html|
+http://thomas.loc.gov/cgi-bin/bdquery/z?d111:s.00352:
+http://thomas.loc.gov/cgi-bin/bdquery/z?d108:S.1426: #summary and status
+full text of bill:
+http://thomas.loc.gov/cgi-bin/query/z?c108:S.1426: # full text
+
+nominations
+
+http://thomas.loc.gov/cgi-bin/ntquery/D?nomis:11:./temp/~nomisakOIbl::
+
+committee reports
+
+http://thomas.loc.gov/cgi-bin/cpquery/5?cp108:./temp/~TSOPPYMnT&sid=TSOPPYMnT&item=5&sel=TOCLIST&hd_count=12&xform_type=3&r_n=hr696.108&dbname=cp108&&maxdocs=500&variant=y&r_t=jc&refer=&&w_p=car&attr=3&&
+
+congressional record daily digest
+
+http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20091002)

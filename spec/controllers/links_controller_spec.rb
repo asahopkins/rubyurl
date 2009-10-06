@@ -61,13 +61,14 @@ describe LinksController, "redirect with token" do
   
   before(:each) do
     @link = mock( 'link' )
-    Link.should_receive( :find_by_token ).with( 'abc' ).and_return( @link )
+    Link.should_receive( :find_by_token ).with( 'abcd' ).and_return( @link )
     @link.stub!( :add_visit )
-    @link.should_receive( :website_url ).and_return( 'http://google.com/' )
-    get :redirect, :token => 'abc'    
+    # @link.should_receive( :website_url ).and_return( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
+    @link.should_receive( :thomas_permalink ).and_return( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
+    get :redirect, :token => 'abcd'    
   end
   
   it "should call redirected to a website when passed a token" do
-    response.should redirect_to( 'http://google.com/' )
+    response.should redirect_to( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
   end
 end

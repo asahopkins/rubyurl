@@ -15,8 +15,8 @@ class Api::LinksController < Api::BaseController
       end
     else
       respond_to do |format|
-        format.xml { render :xml => xml_error_response( "Unable to generate a RubyURL for you" ) }
-        format.json { render :json => "Unable to generate a RubyURL for you".to_json }
+        format.xml { render :xml => xml_error_response( "Unable to generate a TinyThom.as for you" ) }
+        format.json { render :json => "Unable to generate a TinyThom.as for you".to_json }
       end  
     end
   end

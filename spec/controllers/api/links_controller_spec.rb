@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Api::LinksController, "creating a new rubyurl" do
   def valid_parameters
-    { :website_url => 'http://robbyonrails.com/' }
+    { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:' }
   end
   
   before( :each ) do

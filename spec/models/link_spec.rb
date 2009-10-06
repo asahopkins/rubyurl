@@ -119,36 +119,36 @@ describe "A new link" do
   it "should not save when provided a URL without http://" do
     @link = Link.new
     @link.attributes = valid_attributes.except(:website_url)
-    @link.website_url = 'google.com'
+    @link.website_url = 'thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:'
     @link.should have(1).error_on(:website_url)
   end
   
-  it "should save a link without a .com/.net/.org/etc." do
+  it "should not save a link without http://thomas.loc.gov/." do
     @link = Link.new
     @link.attributes = valid_attributes.except(:website_url)
-    @link.website_url = 'http://hamster-style/'
-    @link.should have(0).errors_on(:website_url)
+    @link.website_url = 'http://www.google.com'
+    @link.should have(1).errors_on(:website_url)
   end
 
   it "should save a link with query string parameters" do
     @link = Link.new
     @link.attributes = valid_attributes.except(:website_url)
-    @link.website_url = 'http://hamsterstyle.com/foo?x=1'
+    @link.website_url = 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:'
     @link.should have(0).errors_on(:website_url)
-  end    
+  end
 
-  it "should save a link with an achor tag and retain it" do
+  it "should save a link with an anchor tag and retain it" do
     @link = Link.new
     @link.attributes = valid_attributes.except(:website_url)
-    @link.website_url = 'http://hamsterstyle.com/foo?x=1#test'
+    @link.website_url = 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:#test'
     @link.save
-    @link.website_url.should == 'http://hamsterstyle.com/foo?x=1#test'
+    @link.website_url.should == 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:#test'
   end
 end
 
 describe Link, 'to_api_xml' do
   before( :each ) do
-    @link = Link.new( { :website_url => 'http://www.robbyonrails.com/', :ip_address => '127.0.0.1' } )
+    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:', :ip_address => '127.0.0.1' } )
     @link.save
   end
   
@@ -159,7 +159,7 @@ end
 
 describe Link, 'to_api_json' do
   before( :each ) do
-    @link = Link.new( { :website_url => 'http://github.com/robbyrussell/', :ip_address => '127.0.0.1' } )
+    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', :ip_address => '127.0.0.1' } )
     @link.save
   end
   

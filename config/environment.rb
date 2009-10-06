@@ -61,3 +61,5 @@ end
 
 # Include your application configuration below
 require 'hash_extensions'
+require 'curb'
+require 'hpricot'
