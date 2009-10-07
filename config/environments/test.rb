@@ -18,4 +18,4 @@ config.action_controller.perform_caching             = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
-DOMAIN_NAME = 'http://rubyurl.com/'
+DOMAIN_NAME = 'http://localhost:3000/'

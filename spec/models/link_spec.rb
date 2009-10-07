@@ -148,22 +148,30 @@ end
 
 describe Link, 'to_api_xml' do
   before( :each ) do
-    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:', :ip_address => '127.0.0.1' } )
+    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => "http://thomas.loc.gov/cgi-bin/query/R?r108:FLD001:E50456",    
+      :link_type => "cong_record",
+      :cr_page => "E50456"} )
     @link.save
   end
   
   it "should return the proper XML" do
-    @link.to_api_xml.should == '<?xml version="1.0" encoding="UTF-8"?><link><website_url>' + @link.website_url + '</website_url><permalink>' + @link.permalink + '</permalink></link>'
+    @link.to_api_xml.should == '<?xml version="1.0" encoding="UTF-8"?><link><website_url>' + @link.website_url + '</website_url><permalink>' + @link.permalink + '</permalink><thomas_permalink>' + @link.thomas_permalink + '</thomas_permalink></link>'
   end
 end
 
 describe Link, 'to_api_json' do
   before( :each ) do
-    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', :ip_address => '127.0.0.1' } )
+    @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => "http://thomas.loc.gov/cgi-bin/query/R?r108:FLD001:E50456",    
+      :link_type => "cong_record",
+      :cr_page => "E50456"} )
     @link.save
   end
   
   it "should return the proper JSON" do
-    @link.to_api_json.should == '{"link": {"permalink": "' + @link.permalink + '", "website_url": "' + @link.website_url + '"}}'
+    @link.to_api_json.should == '{"link": {"permalink": "' + @link.permalink + '", "website_url": "' + @link.website_url + '", "thomas_permalink": "' + @link.thomas_permalink + '"}}'
   end
 end

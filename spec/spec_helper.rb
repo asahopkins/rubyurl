@@ -50,7 +50,8 @@ module LinkSpecHelper
   def valid_attributes
     {:website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => "http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:",
-      :link_type => "cong_record"}
+      :thomas_permalink => "http://thomas.loc.gov/cgi-bin/query/R?r108:FLD001:E50456",    
+      :link_type => "cong_record",
+      :cr_page => "E50456"}
   end
 end
