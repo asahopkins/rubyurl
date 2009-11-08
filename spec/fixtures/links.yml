@@ -1,19 +1,100 @@
-planetargon:
+bill:
   id: 1
-  website_url: http://www.planetargon.com/
-  token: pa
+  website_url: "http://thomas.loc.gov/cgi-bin/bdquery/D?d111:3:./temp/~bdUMIY::|/bss/111search.html|"
+  token: bill
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.2410:"
+  congress: 111
+  bill_ident: H.R.2410
+  bill_title: 
+  link_type: bill
+  nomination: 
+  comm_report: 
+  cr_page: 
 
-rubyonrails:
+bill_text:
   id: 2
-  website_url: http://www.rubyonrails.org/
-  token: ror
+  website_url: "http://thomas.loc.gov/cgi-bin/query/D?c111:4:./temp/~c111HM13d1::"
+  token: btxt
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/query/z?c111:H.R.2410.RFS:"
+  congress: 111
+  bill_ident: H.R.2410.RFS
+  bill_title: 
+  link_type: bill_text
+  nomination: 
+  comm_report: 
+  cr_page: 
 
-ruby_lang:
+nomination:
   id: 3
-  website_url: http://www.ruby-lang.org/
-  token: ruby
+  website_url: "http://thomas.loc.gov/cgi-bin/ntquery/D?nomis:2:./temp/~nomisVxve47::"
+  token: nomi
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:110PN0207200:"
+  congress: 110
+  bill_ident: 
+  bill_title: 
+  link_type: nomination
+  nomination: 110PN0207200
+  comm_report: 
+  cr_page: 
+
+comm_report:
+  id: 4
+  website_url: "http://thomas.loc.gov/cgi-bin/cpquery/4?cp107:./temp/~TSOPmMBSy&sid=TSOPmMBSy&item=4&sel=TOCLIST&hd_count=5&xform_type=3&r_n=hr345.107&dbname=cp107&&maxdocs=500&variant=y&r_t=h&r_t=s&r_t=jc&refer=&&w_p=moldova&attr=3&&"
+  token: crpt
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/cpquery/z?cp107:hr345.107:"
+  congress: 107
+  bill_ident: 
+  bill_title: 
+  link_type: comm_report
+  nomination: 
+  comm_report: hr345.107
+  cr_page: 
+
+cong_record:
+  id: 5
+  website_url: "http://thomas.loc.gov/cgi-bin/query/F?r108:73:./temp/~r108fLfumv:e18951:"
+  token: cngr
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/query/R?r108:FLD001:S61636"
+  congress: 108
+  bill_ident: 
+  bill_title: 
+  link_type: cong_record
+  nomination: 
+  comm_report: 
+  cr_page: S61636
+
+
+record_digest:
+  id: 6
+  website_url: "http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20090115)"
+  token: recd
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20090115)"
+  congress: 111
+  bill_ident: 
+  bill_title: 
+  link_type: report_digest
+  nomination: 
+  comm_report: 
+  cr_page: 
 
 spammer_site:
-  id: 4
-  website_url: http://viagra.com/
-  token: 423
+  id: 7
+  website_url: "http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20090116)"
+  token: spam
+  permalink: 
+  thomas_permalink: "http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20090116)"
+  congress: 111
+  bill_ident: 
+  bill_title: 
+  link_type: report_digest
+  nomination: 
+  comm_report: 
+  cr_page: 
+
+

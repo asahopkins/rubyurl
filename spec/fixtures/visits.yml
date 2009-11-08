@@ -10,7 +10,7 @@ visit_two:
   
 visit_three:  
   id: 3
-  link_id: 4
+  link_id: 7
   ip_address: 127.0.0.1
   flagged: spam
 

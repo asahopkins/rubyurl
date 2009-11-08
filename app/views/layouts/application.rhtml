@@ -3,15 +3,15 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>RubyURL &raquo; <%= (title = yield :title) ? title : 'Keep it short (and sweet)' %></title>
+	<title>tinyThom.as &raquo; <%= (title = yield :title) ? title : 'thomas.loc.gov, preserved' %></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="description" content="rubyurl shortens long urls" />
-	<meta name="keywords" content="rubyurl tinyurl url links ruby rails" />
+	<meta name="description" content="tinythom.as translates temporary thomas.loc.gov urls to permalinks and makes short urls for them" />
+	<meta name="keywords" content="tinythomas tinythom.as congress bill loc record permalink url links ruby rails" />
 	<meta http-equiv="Content-Language" content="en-us" />
 	<meta name="ROBOTS" content="ALL" />
 	<meta http-equiv="imagetoolbar" content="false" />
 	<meta name="MSSmartTagsPreventParsing" content="true" />
-	<link rel="commands" href="/javascripts/ubiquity.js"; name="RubyURL for Ubiquity" />
+	<link rel="commands" href="/javascripts/ubiquity.js"; name="tinyThom.as for Ubiquity" />
 
 	<%= stylesheet_link_tag "reset" %>
 	<%= stylesheet_link_tag "master" %>
@@ -28,19 +28,22 @@
 			<%= yield %>		
 		<dl id="tos">
 			<dt>Terms of Use:</dt> 
-			<dd>RubyURL was created as a free service to make posting long URLs easier. If you use it for spamming or illegal purposes, your RubyURL will be disabled. This service is provided without warranty of any kind.</dd>
+			<dd>tinyThom.as was created as a free service to make preserving <a href="http://thomas.loc.gov">http://thomas.loc.gov</a> URLs easy and make posting long URLs easier. If you use it for spamming or illegal purposes, your tinyThom.as will be disabled. This service is provided without warranty of any kind.</dd>
 		</dl> <!-- end Terms of Service -->
 	</div><!-- end wrapper -->
 	<div id="footer">
 		<%= render :partial => 'shared/footer' %>
 	</div> <!-- end footer -->
 
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 </script>
 <script type="text/javascript">
-_uacct = "UA-254228-5";
-urchinTracker();
-</script>
+try {
+var pageTracker = _gat._getTracker("UA-86174-6");
+pageTracker._trackPageview();
+} catch(err) {}</script>
 
 </body>
 </html>

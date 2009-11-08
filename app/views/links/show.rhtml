@@ -1,26 +1,32 @@
 <div id="app_content">
   <div id="url">
-    <dl>
-      <dt>Here is your TinyThom.as</dt>
-      <dd><%= link_to @link.permalink, @link.permalink -%></dd> 
-    </dl>
-    <div id="x_copy_button" style="float:right;">
-      <%= clippy(@link.permalink, '#BA0000') -%>
-    </div>    
+	<div id="permalink_display">
+	    <dl>
+	      <dt id="permalink_url_label">Here is your tinyThom.as URL</dt>
+	      <dd id="permalink_url"><%= link_to @link.permalink, @link.permalink -%></dd> 
+	    </dl>
+	    <div id="x_copy_button" style="float:right;">
+	      <%= clippy(@link.permalink, '#000088') -%>
+	    </div>    
 
-    <div id="x_copied" style="display:none;">
-      <p>Your RubyURL is ready for pasting!</p>
+	    <div id="x_copied" style="display:none;">
+	      <p>Your tinyThom.as URL is ready for pasting!</p>
+	    </div>
     </div>
+	<p id="link_info">
+		<dl>
+			<dt id="thomas_url_label">Permanent Thomas Link:</dt><dd id="thomas_url"><%= link_to @link.thomas_permalink, @link.thomas_permalink -%></dd>
+			<dt id="original_url_label">Original URL:</dt><dd id="original_url"><%= link_to @link.website_url, @link.website_url -%></dd>
+		</dl>
+	</p>
     
-    <p id="original_url_info">Original URL: <span id="original_url"><%= @link.website_url -%></span></p> 
-    
-    <p><%= link_to 'Create another rubyurl', '/' -%> &#8617;</p>
+    <p><%= link_to 'Create another tinyThom.as URL', '/' -%> &#8617;</p>
   </div>
 
   <dl id="url_stats">
     <dt>Original URL Length:</dt> 
     <dd><%= @link.website_url.length -%> characters</dd>
-    <dt>RubyURL Length:</dt> 
+    <dt>tinyThom.as Length:</dt> 
     <dd><%= @link.permalink.length -%> characters</dd>
     <dt>shortened by:</dt> 
     <dd><%= @link.website_url.length - @link.permalink.length -%> characters</dd>

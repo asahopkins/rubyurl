@@ -7,20 +7,20 @@ describe Link, "with fixtures loaded" do
     Link.find(:all).should_not be_empty
   end
   
-  it "should have four records" do
-    Link.should have(4).records
+  it "should have seven records" do
+    Link.should have(7).records
   end
 end
 
-describe "Planet Argon link " do
+describe "Bill link " do
   fixtures :links, :visits
   
   before(:each) do
-    @link = Link.find(links(:planetargon).id)
+    @link = Link.find(links(:bill).id)
   end
   
   it "should have a matching website url" do
-    @link.website_url.should eql(links(:planetargon).website_url)
+    @link.website_url.should eql(links(:bill).website_url)
   end
   
   it "should have two (2) visits" do
@@ -108,8 +108,16 @@ describe "A new Link, which already exists" do
   end
   
   it "should return the original link rather than create a new one" do
-    new_link = Link.find_or_create_by_website_url(valid_attributes[:website_url])
+    old_token = @link.token
+    old_type = @link.link_type
+    old_permalink = @link.permalink
+    old_website_url = @link.website_url
+    new_link = Link.find_or_create_by_url(valid_attributes[:thomas_permalink])
     new_link.should eql(@link)
+    new_link.token.should eql(old_token)
+    new_link.link_type.should eql(old_type)
+    new_link.permalink.should eql(old_permalink)
+    new_link.website_url.should_not eql(old_website_url)
   end
 end
 

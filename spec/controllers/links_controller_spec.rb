@@ -39,7 +39,7 @@ describe LinksController do
   
   it "should save a new link with valid attributes" do
     lambda do
-      post :create, :link => valid_attributes[:website_url]
+      post :create, :link => valid_attributes
     end.should change(Link, :count).by(1)
   end
 end

@@ -1,15 +1,15 @@
 CmdUtils.CreateCommand({
-  name: "rubyurl",
+  name: "tinythomas",
   takes: {websiteUrl: noun_arb_text},
   
-  homepage: "http://rubyurl.com",
-  author: {name: "Alex Malinovich", homepage: "http://the-love-shack.net/", email: "alex@malinovich.name"},
+  homepage: "http://localhost:3000",
+  author: {name: "Asa Hopkins based on Alex Malinovich", homepage: "http://www.opencampaigns.net and http://the-love-shack.net/", email: "asahopkins@gmail.com"},
   license: "GPL",
-  icon: "http://rubyurl.com/favicon.ico",
-  description: 'Replaces the selected URL with a <a href="http://rubyurl.com">RubyURL</a>', 
+  icon: "http://tinythom.as/favicon.ico",
+  description: 'Replaces the selected THOMAS URL with a <a href="http://tinythom.as">tinyThom.as</a>', 
   
   preview: function(previewBlock, websiteUrlText) {
-    var previewTemplate = "Provides a RubyURL for <br/>" +       
+    var previewTemplate = "Provides a tinyThom.as URl for <br/>" +       
                           "<b>${websiteUrl}</b><br /><br />";
     var previewData = {
       websiteUrl: websiteUrlText.text,
@@ -23,11 +23,11 @@ CmdUtils.CreateCommand({
   
   execute: function(websiteUrlText) {
     if(websiteUrlText.text.length < 1) {
-      displayMessage("You must specify a URL to shorten!");
+      displayMessage("You must specify a thomas.loc.gov URL to shorten!");
       return;
     }
     
-    var updateUrl = "http://rubyurl.com/api/links.json";
+    var updateUrl = "http://localhost:3000/api/links.json";
 
     var updateParams = {
       website_url: websiteUrlText.text

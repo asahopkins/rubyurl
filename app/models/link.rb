@@ -23,7 +23,7 @@ class Link < ActiveRecord::Base
     return visit
   end
   
-  def Link.find_or_create_by_url (website_url)
+  def Link.find_or_create_by_url(website_url)
     ltype = Link.id_document_type(website_url)
     if ltype == "none"
       return Link.new
@@ -46,12 +46,21 @@ class Link < ActiveRecord::Base
         s = $&
         link = Link.find_or_create_by_nomination(s)
       when "cong_record"
+        # TODO: give better permalinks for CR pages with Next and Previous links (to get down to remarks rather than pages)
         congress = website_url[n+2..n+4].to_i
-        doc.inner_html =~ /Page:\s+[HSED]\d+\]/
-        s = $&
-        page = s[6...-1]
-        t = page[0..0]
-        p = page[1..-1].to_i
+        if doc.inner_html =~ /Page:\s+[HSED]\d+\]/
+          s = $&
+          page = s[6...-1]
+          t = page[0..0]
+          p = page[1..-1].to_i
+        elsif doc.inner_html =~ /Page\s+[HSED]\d+/
+          s = $&
+          page = s[5..-1]
+          t = page[0..0]
+          p = page[1..-1].to_i          
+        else
+          return Link.new
+        end
         # puts p
         doc.inner_html =~ /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d+,\s+\d+/
         year = $&[-4..-1].to_i
@@ -69,17 +78,19 @@ class Link < ActiveRecord::Base
         cr_page =t+p_s
         link = Link.find_or_create_by_congress_and_cr_page(congress, cr_page)        
       when "comm_report"
-        
+        # TODO
       when "bill_text"
-        
+        # TODO        
       when "record_digest"
-        
+        # TODO        
       end
-      link.website_url = website_url if link.new_record?
-      link.link_type = ltype if link.new_record?
-      link.generate_token
-      link.generate_thomas_permalink
-      link.generate_opencongress_permalink
+      link.website_url = website_url
+      if link.new_record?
+        link.link_type = ltype #if link.new_record?
+        link.generate_token
+        link.generate_thomas_permalink
+        link.generate_opencongress_permalink        
+      end
       return link
     end    
   end
@@ -104,7 +115,7 @@ class Link < ActiveRecord::Base
     return "none" if n.nil? or n == false
     return "bill" if (website_url[n-1..n] == "z?" or website_url[n-1..n] == "D?") and website_url[n..n+1] =="?d"
     return "bill_text" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?c")
-    return "cong_record" if (website_url[n-1..n] == "C?" or website_url[n-1..n] == "D?") and website_url[n..n+1] =="?r"
+    return "cong_record" if (website_url[n-1..n] == "C?" or website_url[n-1..n] == "D?" or website_url[n-1..n] == "R?") and website_url[n..n+1] =="?r"
     return "cong_record" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?r")
     return "nomination" if (website_url[n-1..n] == "D?" and website_url[n..n+5] =="?nomis")
     return "comm_report" if (website_url[n-1..n] == "5?" and website_url[n..n+2] =="?cp")
@@ -133,7 +144,7 @@ class Link < ActiveRecord::Base
   end
   
   def generate_opencongress_permalink
-    
+    # TODO: calculate and provide a link to opencongress's info for bills
   end
 
   private
@@ -152,8 +163,6 @@ class Link < ActiveRecord::Base
       end
       temp_token
     end
-    
-    
     
 end
 

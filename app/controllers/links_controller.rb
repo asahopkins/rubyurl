@@ -18,7 +18,7 @@ class LinksController < ApplicationController
       calculate_links # application controller, refactor soon
       render :action => :show
     else
-      flash[:warning] = 'There was an issue trying to create your TinyThom.as URL.'
+      flash[:warning] = 'There was an issue trying to create your tinyThom.as URL.'
       redirect_to :action => :invalid
     end
   end

@@ -1,10 +1,33 @@
 <div id="info_content">
-  <h1>What is RubyURL?</h1>
+  <h1>What is tinyThom.as?</h1>
 
-  <p>In a nutshell, RubyURL is an online tool for converting really long website addresses into short ones so that you can share them with your friends via Twitter, IRC, Email, Campfire, etc. We've also provided a public API so that you can generate RubyURLs in your web applications.</p>
+  <p>In a nutshell, tinyThom.as is an online tool for preserving the webpages served up by <a href="http://thomas.loc.gov">http://thomas.loc.gov</a> for documents related to the U.S. Congress. tinyThom.as generates full-size permanent URLs for THOMAS pages, and also generates short URLs which redirect to those long URLs in order to make them easy to pass around via Twitter, Email, Facebook, etc. We've also provided a public API so that you can generate tinyThom.as URLs in your web applications.</p>
 
-  <p>Beyond that, RubyURL was the first project that <a href="http://planetargon.com/who-we-are/robby-russell">Robby Russell</a>, founder of <a href="http://planetargon.com/">Planet Argon</a> built and deployed with the <a href="http://rubyonrails.org/">Ruby on Rails</a> framework in early 2005. The code behind it has been open sourced and is <a href="http://github.com/robbyrussell/rubyurl/tree/master">available on Github</a>.</p>
+	<h2>Why is tinyThom.as necessary?</h2>
 
-  <p>Special thanks to <a href="http://chrisgriffin.org">Chris Griffin</a> for providing the current design of RubyURL.</p>
+	<p>Try this link: <a href="http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|">http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|</a>. It worked if you visited Thomas on November 7, 2009, but it won't work for you now. Thomas serves most of its results using these links which shut off over time, and only presents permanent links for <a href="http://thomas.loc.gov/home/handles/help.html">few</a> of the many kinds of content it serves.</p>
+
+	<h2>How does tinyThom.as work?</h2>
+
+	<p>When you send tinyThom.as a URL, it quickly loads the page from the Library of Congress (before the link expires) and then examines the content of the page to determine what search criteria it can use to bring you back to that same page. For example, for a Bill Summary and Status page (<a href="http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.3477:">example</a>), it finds the bill number and the congressional session, and then generates a URL which searches for just that information. At the same time, it makes a tinyThom.as URL, like <a href="http://tinythom.as/GAy7">http://tinythom.as/GAy7</a> which you can use to pass the link around without dealing with the long Thomas URLs.</p>
+
+	<h2>What kinds of content does tinyThom.as understand?</h2>
+	
+	<p><strong>Bill Summary and Status</strong>, like <a href="http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.3477:">this page</a>.</p>
+
+	<p><strong>Nominations</strong>, like <a href="http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:111PN0037000:">this page</a>.</p>
+
+	<p><strong>Congressional Record pages</strong>, like <a href="http://thomas.loc.gov/cgi-bin/query/R?r108:FLD001:E50456">this page</a>. (We hope to extend the code to allow it to bring you directly to the remarks in the record, rather than just the list of all remarks on a given page of the Record.)</p>
+
+	<p>In the future we hope to also process full bill text, committee reports, and the congressional record daily digests.</p>
+
+	<h2>About the code</h2>
+
+  <p>tinyThom.as was written by Asa Hopkins, an open source <a href="http://www.opencampaigns.net">developer</a> and political activist. It is heavily based on the open source code written by Robby Russell for <a href="http://rubyurl.com">http://rubyurl.com</a>, and the code for tinyThom.as is also open source and available on <a href="http://github.com/asahopkins/rubyurl">Github</a>.</p>
+
+  <p>Thanks to <a href="http://chrisgriffin.org">Chris Griffin</a> for providing the design of RubyURL that tinyThom.as is based on.</p>
+
+	<p>Thanks to the folks on the <a href="http://wiki.sunlightlabs.com/Project_Ideas">Sunlight Labs wiki</a> for the idea to build this application.</p>
+	
 </div> <!-- end info_content -->
 
