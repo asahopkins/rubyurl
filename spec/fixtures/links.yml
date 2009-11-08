@@ -11,6 +11,7 @@ bill:
   nomination: 
   comm_report: 
   cr_page: 
+  visits_count: 2
 
 bill_text:
   id: 2
@@ -25,6 +26,7 @@ bill_text:
   nomination: 
   comm_report: 
   cr_page: 
+  visits_count: 0
 
 nomination:
   id: 3
@@ -39,6 +41,7 @@ nomination:
   nomination: 110PN0207200
   comm_report: 
   cr_page: 
+  visits_count: 0
 
 comm_report:
   id: 4
@@ -53,6 +56,7 @@ comm_report:
   nomination: 
   comm_report: hr345.107
   cr_page: 
+  visits_count: 0
 
 cong_record:
   id: 5
@@ -67,7 +71,7 @@ cong_record:
   nomination: 
   comm_report: 
   cr_page: S61636
-
+  visits_count: 0
 
 record_digest:
   id: 6
@@ -82,6 +86,7 @@ record_digest:
   nomination: 
   comm_report: 
   cr_page: 
+  visits_count: 0
 
 spammer_site:
   id: 7
@@ -96,5 +101,5 @@ spammer_site:
   nomination: 
   comm_report: 
   cr_page: 
-
+  visits_count: 1
 
