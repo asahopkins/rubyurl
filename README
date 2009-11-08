@@ -1,18 +1,18 @@
 == RubyURL
 
-This project is the source code for the application that powers Rubyurl.com. 
+This project is the source code for the application that powers tinyThom.as. 
 
-* http://rubyurl.com
+* http://tinyThom.as
 
-Feel free to start your own URL-shortening service!
+It is based on the code that powers http://rubyurl.com
 
 == Bugs and/or Feedback
 
-Feel free to submit tickets to the Rubyurl ticket system.
-
-* http://planetargon.lighthouseapp.com/projects/4059-rubyurl
+Please use the Issues tracker on Github -- http://github.com/asahopkins/rubyurl/issues
 
 == Authors
 
+Asa S. Hopkins <asahopkins@gmail.com>
+based on RubyURL by
 Robby Russell <robby@planetargon.com>
 Chris Griffin <chris@deadboltdesign.com>
