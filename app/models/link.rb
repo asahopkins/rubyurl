@@ -117,7 +117,7 @@ class Link < ActiveRecord::Base
     return "bill_text" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?c")
     return "cong_record" if (website_url[n-1..n] == "C?" or website_url[n-1..n] == "D?" or website_url[n-1..n] == "R?") and website_url[n..n+1] =="?r"
     return "cong_record" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?r")
-    return "nomination" if (website_url[n-1..n] == "D?" or website_url[n-1..n] == "z?") and website_url[n..n+5] =="?nomis")
+    return "nomination" if (website_url[n-1..n] == "D?" or website_url[n-1..n] == "z?") and website_url[n..n+5] =="?nomis"
     return "comm_report" if (website_url[n-1..n] == "5?" and website_url[n..n+2] =="?cp")
     return "record_digest" if (website_url[n-1..n] == "B?" and website_url[n..n+1] =="?r")
     return "none"
