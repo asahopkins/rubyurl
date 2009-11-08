@@ -5,6 +5,7 @@ coverage/**
 doc/api
 doc/app
 config/database.yml
+config/deploy.rb
 db/*.sqlite3
 db/schema.rb
 vendor/plugin/boxcar-conductor
