@@ -54,4 +54,33 @@ module LinkSpecHelper
       :link_type => "cong_record",
       :cr_page => "E50456", :congress=>108}
   end
+  
+  def valid_bill
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d110:S254:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.110s254',    
+      :link_type => "bill",
+      :bill_ident => "S254", :congress=>110}    
+  end
+  
+  def valid_bill_text
+    
+  end
+  
+  def valid_nomination
+    
+  end
+  
+  def valid_record_digest
+    
+  end
+  
+  def valid_comm_report
+    
+  end
+  
+  def valid_cong_record
+    valid_attributes
+  end
+  
 end

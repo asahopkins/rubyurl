@@ -6,7 +6,7 @@ describe "links/index" do
   end
 
   it "should display Create a tinyThom.as Link in a h1 tag" do
-    response.should have_tag('label', 'Create a tinyThom.as Link')
+    response.should have_tag('label', 'Create a tinyThom.as Link (original starts with "http://thomas.loc.gov/...")')
   end
 
   it "should display a text input field for the user to paste their url in" do

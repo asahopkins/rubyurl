@@ -7,7 +7,7 @@ class Link < ActiveRecord::Base
   validates_presence_of :website_url, :ip_address, :link_type, :thomas_permalink
   validates_uniqueness_of :website_url, :token  
   # validates_format_of :website_url, :with => /^(http|https):\/\/[a-z0-9]/ix, :on => :save, :message => 'needs to have http(s):// in front of it', :if => Proc.new { |p| p.website_url? }
-  validates_format_of :website_url, :with => /^http:\/\/thomas.loc.gov\/[a-z0-9]/ix, :on => :save, :message => 'needs to start with http://thomas.loc.gov/', :if => Proc.new { |p| p.website_url? }
+  validates_format_of :website_url, :with => /^http:\/\/(thomas|hdl).loc.gov\/[a-z0-9]/ix, :on => :save, :message => 'needs to start with http://thomas.loc.gov/', :if => Proc.new { |p| p.website_url? }
   
   before_create :generate_token
   before_create :generate_thomas_permalink
@@ -33,10 +33,16 @@ class Link < ActiveRecord::Base
       n = (website_url =~ /\?/)
       case ltype
       when "bill"
-        congress = website_url[n+2..n+4].to_i
-        bill_id = (doc/"div#content"/"b")[0].inner_html
-        if bill_id[0..3] == "Item"
-          bill_id = (doc/"div#content"/"b")[1].inner_html
+        if n
+          congress = website_url[n+2..n+4].to_i
+          bill_id = (doc/"div#content"/"b")[0].inner_html
+          if bill_id[0..3] == "Item"
+            bill_id = (doc/"div#content"/"b")[1].inner_html
+          end
+        else #handle redirect
+          n = (website_url =~ /n\./)
+          congress = website_url[n+2..n+4].to_i
+          bill_id = website_url[n+5..-1].upcase
         end
         link = Link.find_or_create_by_congress_and_bill_ident(congress, bill_id)
       when "nomination"
@@ -112,7 +118,14 @@ class Link < ActiveRecord::Base
   # possible return values: bill, bill_text, cong_record, comm_report, nomination, record_digest, none
   def Link.id_document_type(website_url)
     n = (website_url =~ /\?/)
-    return "none" if n.nil? or n == false
+    if n.nil? or n == false
+      n = (website_url =~ /hdl.loc.gov\/loc.uscongress\/legislation/)
+      if n.nil? or n == false
+        return "none"
+      else
+        return "bill"
+      end
+    end
     return "bill" if (website_url[n-1..n] == "z?" or website_url[n-1..n] == "D?") and website_url[n..n+1] =="?d"
     return "bill_text" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?c")
     return "cong_record" if (website_url[n-1..n] == "C?" or website_url[n-1..n] == "D?" or website_url[n-1..n] == "R?") and website_url[n..n+1] =="?r"
@@ -135,7 +148,8 @@ class Link < ActiveRecord::Base
   def generate_thomas_permalink
     case link_type
     when "bill"
-      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident+":"
+#      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident+":"
+      self.thomas_permalink = "http://hdl.loc.gov/loc.uscongress/legislation."+congress.to_s+bill_ident.gsub(/\./,"").downcase
     when "nomination"
       self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:"+nomination+":"        
     when "cong_record"
