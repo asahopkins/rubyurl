@@ -63,20 +63,36 @@ module LinkSpecHelper
       :bill_ident => "S254", :congress=>110}    
   end
   
-  def valid_bill_text
-    
+  def valid_bill_text #TODO figure out how to get the particular version requested (enrolled, etc)
+    {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c104:s.377.enr:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:S.377:',    
+      :link_type => "bill_text",
+      :nomination => "S.377", :congress=>104}    
   end
   
   def valid_nomination
-    
+    {:website_url => "http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:111PN0037000:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:111PN0037000:',    
+      :link_type => "nomination",
+      :nomination => "111PN0037000", :congress=>111}    
   end
   
-  def valid_record_digest
-    
+  def valid_record_digest  # record_digests with other URL formats look like cong_records  
+    {:website_url => "http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20091107)", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/B?r111:@FIELD(FLD003+d)+@FIELD(DDATE+20091107)',    
+      :link_type => "record_digest",
+      :digest_date=> DateTime.civil(2009,11,7), :congress=>111}    
   end
   
   def valid_comm_report
-    
+    {:website_url => "http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:hr189.104:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:HR189.104:',    
+      :link_type => "comm_report",
+      :report_ident => "HR189.104", :congress=>104}    
   end
   
   def valid_cong_record

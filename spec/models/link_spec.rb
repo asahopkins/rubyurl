@@ -97,23 +97,41 @@ describe Link, "a new link" do
     @link.permalink.should eql(DOMAIN_NAME + @link.token)
   end
   
-  it "should generate the correct thomas link for a congressional record page" do
-    @link.attributes = valid_cong_record
-    new_link = Link.find_or_create_by_url(valid_cong_record[:website_url])
-    new_link.thomas_permalink.should eql(@link.thomas_permalink)
-  end
-
   it "should generate the correct thomas link for a bill page" do
     @link.attributes = valid_bill
     new_link = Link.find_or_create_by_url(valid_bill[:website_url])
     new_link.thomas_permalink.should eql(@link.thomas_permalink)
   end
 
-  # it "should generate the correct thomas link for a bill text page" do
-  #   @link.attributes = valid_bill_text
-  #   new_link = Link.find_or_create_by_url(valid_bill_text[:website_url])
-  #   new_link.thomas_permalink.should eql(@link.thomas_permalink)
-  # end
+  it "should generate the correct thomas link for a bill text page" do
+    @link.attributes = valid_bill_text
+    new_link = Link.find_or_create_by_url(valid_bill_text[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+
+  it "should generate the correct thomas link for a nomination page" do
+    @link.attributes = valid_nomination
+    new_link = Link.find_or_create_by_url(valid_nomination[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+
+  it "should generate the correct thomas link for a record digest page" do
+    @link.attributes = valid_record_digest
+    new_link = Link.find_or_create_by_url(valid_record_digest[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+
+  it "should generate the correct thomas link for a committee report page" do
+    @link.attributes = valid_comm_report
+    new_link = Link.find_or_create_by_url(valid_comm_report[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a congressional record page" do
+    @link.attributes = valid_cong_record
+    new_link = Link.find_or_create_by_url(valid_cong_record[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
     
 end
 
@@ -150,7 +168,7 @@ describe "A new link" do
     @link.should have(1).error_on(:website_url)
   end
   
-  it "should not save a link without http://thomas.loc.gov/." do
+  it "should not save a link without http://thomas.loc.gov/ or http://hdl.loc.gov/." do
     @link = Link.new
     @link.attributes = valid_attributes.except(:website_url)
     @link.website_url = 'http://www.google.com'
