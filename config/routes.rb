@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'about', :controller => 'links', :action => 'about'
   map.connect 'api', :controller => 'links', :action => 'api'
   map.connect 'report-abuse', :controller => 'links', :action => 'report'
-  map.connect 'home', :controller => 'links', :action => 'home'  
+  map.connect 'home', :controller => 'links', :action => 'index'  
 
   map.resources :links, :name_prefix => 'api_', :path_prefix => 'api', :controller => 'api/links'  
   

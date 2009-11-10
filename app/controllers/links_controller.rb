@@ -1,19 +1,19 @@
 class LinksController < ApplicationController
 
+  caches_page :index
+
   def index  
-    redirect_to '/home'
-  end
-  
-  def home
     @link = Link.new
     render :action => 'index'
   end
-
+  
   def create
     website_url = params.include?(:website_url) ? params[:website_url] : params[:link][:website_url]
     @link = Link.find_or_create_by_url(website_url)
     @link.ip_address = request.remote_ip if @link.new_record?
-      
+    
+    expire_page :action => :index
+    
     if @link.save
       calculate_links # application controller, refactor soon
       render :action => :show
