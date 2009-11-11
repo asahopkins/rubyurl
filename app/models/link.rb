@@ -77,7 +77,7 @@ class Link < ActiveRecord::Base
         else
           return website_url
         end
-        doc.inner_html =~ /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d+,\s+\d+/
+        doc.inner_html =~ /(January|February|March|April|May|June|July|August|September|October|November|December)\[*\s+\d+,\s+\d+/
         year = $&[-4..-1].to_i
         if (year % 2) == 0
           # second session
@@ -160,7 +160,7 @@ class Link < ActiveRecord::Base
     end
     return "bill" if website_url =~ /\/(z|D)\?d\d/
     return "bill_text" if website_url =~ /\/(\d|z)\?c\d/
-    return "cong_record" if website_url =~ /\/(z|C|D|R)\?r\d/
+    return "cong_record" if website_url =~ /\/(z|C|D|R|F)\?r\d/
     return "nomination" if website_url =~ /\/(z|D)\?nomis/
     return "comm_report" if website_url =~ /\/(\d+|z)\?cp\d/
     return "comm_report" if website_url =~ /cpquery\/\?sel=(DOC|TOCLIST)/
