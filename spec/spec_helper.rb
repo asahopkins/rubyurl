@@ -88,11 +88,12 @@ module LinkSpecHelper
   end
   
   def valid_comm_report
+    #"http://thomas.loc.gov/cgi-bin/cpquery/2?cp111:./temp/~TSOPfShsa&sid=TSOPfShsa&item=2&sel=TOCLIST&hd_count=197&xform_type=3&r_n=hr089.111&dbname=cp111&&maxdocs=500&variant=y&r_t=h&r_t=s&r_t=jc&refer=&&w_p=energy&attr=3&&"
     {:website_url => "http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:hr189.104:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:HR189.104:',    
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:hr189.104:',    
       :link_type => "comm_report",
-      :report_ident => "HR189.104", :congress=>104}    
+      :report_ident => "HR189", :congress=>104}    
   end
   
   def valid_cong_record

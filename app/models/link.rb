@@ -56,7 +56,8 @@ class Link < ActiveRecord::Base
           s_full = $&
           s_full =~ /\w+$/
           s = $&
-          link = Link.find_or_create_by_nomination_and_link_type(s, ltype)
+          congress = s[0..2].to_i
+          link = Link.find_or_create_by_congress_and_nomination_and_link_type(congress, s, ltype)
         else
           return website_url
         end
@@ -76,15 +77,13 @@ class Link < ActiveRecord::Base
         else
           return website_url
         end
-        # puts p
         doc.inner_html =~ /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d+,\s+\d+/
         year = $&[-4..-1].to_i
-        # puts year
         if (year % 2) == 0
-          # puts "second session"
+          # second session
           p = p+50000
         else
-          # puts "first session"
+          # first session
         end
         p_s = p.to_s
         while p_s.length < 5
@@ -93,10 +92,26 @@ class Link < ActiveRecord::Base
         cr_page =t+p_s
         link = Link.find_or_create_by_congress_and_cr_page_and_link_type(congress, cr_page, ltype)        
       when "comm_report"
-        congress = website_url[n+3..n+5].to_i
-        return Link.new
-        # "Report 110-247 -"
-        # TODO
+        if doc.inner_html =~ /(Senate|House)\s+Report\s+\d+\-\d+/
+          s = $&
+          s =~ /^(Senate|House)/
+          body = $&
+          s =~ /\d+$/
+          report_num = $&
+          s =~ /\d+\-/
+          congress = $&
+          congress = congress[0..2].to_i
+          if body == "House"
+            report_ident = "hr"+report_num
+          elsif body == "Senate"
+            report_ident = "sr"+report_num            
+          else
+            return Link.new
+          end
+          link = Link.find_or_create_by_congress_and_report_ident_and_link_type(congress, report_ident, ltype)
+        else
+          return website_url
+        end
       when "bill_text"
         congress = website_url[n+2..n+4].to_i
         # TODO        
@@ -110,7 +125,6 @@ class Link < ActiveRecord::Base
       end
       link.website_url = website_url
       if link.new_record?
-#        link.link_type = ltype #if link.new_record?
         link.generate_token
         link.generate_thomas_permalink
         link.generate_opencongress_permalink        
@@ -144,14 +158,13 @@ class Link < ActiveRecord::Base
         return "bill"
       end
     end
-    return "bill" if (website_url[n-1..n] == "z?" or website_url[n-1..n] == "D?") and website_url[n..n+1] =="?d"
-    return "bill_text" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?c")
-    return "cong_record" if (website_url[n-1..n] == "C?" or website_url[n-1..n] == "D?" or website_url[n-1..n] == "R?") and website_url[n..n+1] =="?r"
-    return "cong_record" if (website_url[n-1..n] == "z?" and website_url[n..n+1] =="?r")
-    return "nomination" if (website_url[n-1..n] == "D?" or website_url[n-1..n] == "z?") and website_url[n..n+5] =="?nomis"
-    return "comm_report" if (website_url[n-1..n] == "5?" and website_url[n..n+2] =="?cp")
-    # record_digests with other URL formats look like cong_records
-    return "record_digest" if website_url[n-1..n] == "B?" and website_url[n..n+1] =="?r" and website_url[-1..-1] ==")"
+    return "bill" if website_url =~ /\/(z|D)\?d\d/
+    return "bill_text" if website_url =~ /\/(\d|z)\?c\d/
+    return "cong_record" if website_url =~ /\/(z|C|D|R)\?r\d/
+    return "nomination" if website_url =~ /\/(z|D)\?nomis/
+    return "comm_report" if website_url =~ /\/(\d+|z)\?cp\d/
+    return "comm_report" if website_url =~ /cpquery\/\?sel=(DOC|TOCLIST)/
+    return "record_digest" if website_url =~ /\/B\?r\d\S+\)$/ # record_digests with other URL formats look like cong_records
     return "none"
   end
 
@@ -176,7 +189,7 @@ class Link < ActiveRecord::Base
     when "record_digest"
       self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/query/B?r"+congress.to_s+":@FIELD(FLD003+d)+@FIELD(DDATE+"+digest_date.strftime("%Y%m%d")+")"
     when "comm_report"
-      
+      self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/cpquery/z?cp"+congress.to_s+":"+report_ident+"."+congress.to_s+":"
     when "bill_text"
       
     end
