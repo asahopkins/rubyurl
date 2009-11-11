@@ -132,6 +132,11 @@ describe Link, "a new link" do
     new_link = Link.find_or_create_by_url(valid_cong_record[:website_url])
     new_link.thomas_permalink.should eql(@link.thomas_permalink)
   end
+  
+  it "should flag expired Thomas links" do
+    new_link = Link.find_or_create_by_url("http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|")
+    new_link.should eql("http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|")    
+  end
     
 end
 

@@ -31,26 +31,35 @@ class Link < ActiveRecord::Base
       c = Curl::Easy.perform(website_url).body_str
       doc = Hpricot(c)
       n = (website_url =~ /\?/)
+      m = (website_url =~ /n\./)
       case ltype
       when "bill"
         if n
           congress = website_url[n+2..n+4].to_i
-          bill_id = (doc/"div#content"/"b")[0].inner_html
-          if bill_id[0..3] == "Item"
-            bill_id = (doc/"div#content"/"b")[1].inner_html
+          if (doc/"div#content"/"b")[0]
+            bill_id = (doc/"div#content"/"b")[0].inner_html
+            if bill_id[0..3] == "Item"
+              bill_id = (doc/"div#content"/"b")[1].inner_html
+            end
+          else
+            return website_url
           end
-        else #handle redirect
-          n = (website_url =~ /n\./)
-          congress = website_url[n+2..n+4].to_i
-          bill_id = website_url[n+5..-1].upcase
+        elsif m #handle redirect
+          congress = website_url[m+2..m+4].to_i
+          bill_id = website_url[m+5..-1].upcase
+        else
+          return Link.new
         end
         link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
       when "nomination"
-        doc.inner_html =~ /Control\s+Number:\s+<\/span>\w+/
-        s_full= $&
-        s_full =~ /\w+$/
-        s = $&
-        link = Link.find_or_create_by_nomination_and_link_type(s, ltype)
+        if doc.inner_html =~ /Control\s+Number:\s+<\/span>\w+/
+          s_full = $&
+          s_full =~ /\w+$/
+          s = $&
+          link = Link.find_or_create_by_nomination_and_link_type(s, ltype)
+        else
+          return website_url
+        end
       when "cong_record"
         # TODO: give better permalinks for CR pages with Next and Previous links (to get down to remarks rather than pages)
         congress = website_url[n+2..n+4].to_i
@@ -65,7 +74,7 @@ class Link < ActiveRecord::Base
           t = page[0..0]
           p = page[1..-1].to_i          
         else
-          return Link.new
+          return website_url
         end
         # puts p
         doc.inner_html =~ /(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d+,\s+\d+/
@@ -85,18 +94,19 @@ class Link < ActiveRecord::Base
         link = Link.find_or_create_by_congress_and_cr_page_and_link_type(congress, cr_page, ltype)        
       when "comm_report"
         congress = website_url[n+3..n+5].to_i
+        return Link.new
         # "Report 110-247 -"
         # TODO
       when "bill_text"
         congress = website_url[n+2..n+4].to_i
         # TODO        
+        return Link.new
       when "record_digest" # record_digests with other URL formats look like cong_records
         congress = website_url[n+2..n+4].to_i
         n = (website_url =~ /DDATE\+/)
         date_str = website_url[n+6..-2]
         digest_date = DateTime.civil(date_str[0..3].to_i, date_str[4..5].to_i, date_str[6..7].to_i)
-        link = Link.find_or_create_by_congress_and_digest_date_and_link_type(congress, digest_date, ltype) 
-        # TODO        
+        link = Link.find_or_create_by_congress_and_digest_date_and_link_type(congress, digest_date, ltype)
       end
       link.website_url = website_url
       if link.new_record?
@@ -141,7 +151,7 @@ class Link < ActiveRecord::Base
     return "nomination" if (website_url[n-1..n] == "D?" or website_url[n-1..n] == "z?") and website_url[n..n+5] =="?nomis"
     return "comm_report" if (website_url[n-1..n] == "5?" and website_url[n..n+2] =="?cp")
     # record_digests with other URL formats look like cong_records
-    return "record_digest" if (website_url[n-1..n] == "B?") and website_url[n..n+1] =="?r"
+    return "record_digest" if website_url[n-1..n] == "B?" and website_url[n..n+1] =="?r" and website_url[-1..-1] ==")"
     return "none"
   end
 

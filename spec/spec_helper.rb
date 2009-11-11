@@ -99,4 +99,9 @@ module LinkSpecHelper
     valid_attributes
   end
   
+  def expired_website_url
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|"}    
+  end
+  
+  
 end

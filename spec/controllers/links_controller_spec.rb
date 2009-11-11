@@ -24,8 +24,8 @@ describe LinksController do
 
   controller_name :links
   
-  it "should not save a new link wihout a website url" do
-    post :create, :link => {} #valid_attributes.except(:website_url)
+  it "should not save a new link without a website url" do
+    post :create, :link => {}
     assigns(:link).should have_at_least(1).errors_on(:website_url)
   end
   
@@ -33,6 +33,16 @@ describe LinksController do
     lambda do
       post :create, :link => valid_attributes
     end.should change(Link, :count).by(1)
+  end
+end
+
+describe LinksController, "create action" do
+  include LinkSpecHelper
+  controller_name :links
+    
+  it "should redirect an expired URL to the 'expired' page" do
+    post :create, :link => expired_website_url
+    response.should render_template( 'links/expired' )
   end
 end
 
@@ -55,7 +65,6 @@ describe LinksController, "redirect with token" do
     @link = mock( 'link' )
     Link.should_receive( :find_by_token ).with( 'abcd' ).and_return( @link )
     @link.stub!( :add_visit )
-    # @link.should_receive( :website_url ).and_return( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
     @link.should_receive( :thomas_permalink ).and_return( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
     get :redirect, :token => 'abcd'    
   end
