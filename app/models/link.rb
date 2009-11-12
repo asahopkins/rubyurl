@@ -162,7 +162,7 @@ class Link < ActiveRecord::Base
     return "bill_text" if website_url =~ /\/(\d|z)\?c\d/
     return "cong_record" if website_url =~ /\/(z|C|D|R|F)\?r\d/
     return "nomination" if website_url =~ /\/(z|D)\?nomis/
-    return "comm_report" if website_url =~ /\/(\d+|z)\?cp\d/
+    return "comm_report" if website_url =~ /\/(\d+|z|R)\?cp\d/
     return "comm_report" if website_url =~ /cpquery\/\?sel=(DOC|TOCLIST)/
     return "record_digest" if website_url =~ /\/B\?r\d\S+\)$/ # record_digests with other URL formats look like cong_records
     return "none"
