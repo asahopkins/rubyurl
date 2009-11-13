@@ -196,7 +196,20 @@ class Link < ActiveRecord::Base
   end
   
   def generate_opencongress_permalink
-    # TODO: calculate and provide a link to opencongress's info for bills
+    if link_type == "bill"
+      if m = bill_ident.match(/^(H|S)\.(R|J|C)/)
+        type_abbrev = "#{m[1]}#{m[2]}".downcase
+      elsif m = bill_ident.match(/^(H|S).\d+/)
+        type_abbrev = m[1].downcase
+      else
+        # OpenCongress doesn't have pages for amendments (e.g. H.AMDT.1)
+        return
+      end
+
+      bill_num = bill_ident.gsub(/[^\d]+/, '')
+
+      self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
+    end
   end
 
   private

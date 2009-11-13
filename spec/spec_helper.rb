@@ -58,7 +58,8 @@ module LinkSpecHelper
   def valid_bill
     {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d110:S254:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.110s254',    
+      :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.110s254',
+      :opencongress_link => 'http://www.opencongress.org/bill/110-s254/show',
       :link_type => "bill",
       :bill_ident => "S254", :congress=>110}    
   end
