@@ -17,8 +17,8 @@ class LinksController < ApplicationController
         calculate_links # application controller, refactor soon
         render :action => :show
       else
-        flash[:warning] = 'There was an issue trying to create your tinyThom.as URL.'
-        Prowler.notify "Invalid Create", @website_url, Prowler::Priority::NORMAL
+        # flash[:warning] = 'There was an issue trying to create your tinyThom.as URL.'
+        Prowler.notify "Invalid", @website_url.to_s, Prowler::Priority::NORMAL
         redirect_to :action => :invalid
       end
     else
