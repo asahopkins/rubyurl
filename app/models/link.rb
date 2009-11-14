@@ -243,7 +243,7 @@ class Link < ActiveRecord::Base
   
   def generate_opencongress_permalink
     unless congress < 109
-      if link_type == "bill"
+      if link_type == "bill" or link_type == "bill_text"
         if m = bill_ident.match(/^(h|s)(re|j|c)/ix)
           type_abbrev = "#{m[1]}#{m[2][0..0]}".downcase
         elsif m = bill_ident.match(/^(HR|S)\d+/ix)
@@ -254,8 +254,11 @@ class Link < ActiveRecord::Base
         end
 
         bill_num = bill_ident.gsub(/[^\d]+/, '')
-
-        self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
+        if link_type == "bill"
+          self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
+        elsif link_type == "bill_text"
+          self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/text"          
+        end
       end
     else
       return

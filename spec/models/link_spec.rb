@@ -115,6 +115,12 @@ describe Link, "a new link" do
     new_link.thomas_permalink.should eql(@link.thomas_permalink)
   end
 
+  it "should generate the correct opencongress link for a bill text page" do
+    @link.attributes = valid_bill_text_2
+    new_link = Link.find_or_create_by_url(valid_bill_text_2[:website_url])
+    new_link.opencongress_link.should eql(@link.opencongress_link)
+  end
+
   it "should generate the correct thomas link for a bill text page with multiple versions listed" do
     @link.attributes = valid_bill_text_multi
     new_link = Link.find_or_create_by_url(valid_bill_text_multi[:website_url])

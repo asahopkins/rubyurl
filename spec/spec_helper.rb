@@ -67,9 +67,19 @@ module LinkSpecHelper
   def valid_bill_text
     {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c104:s.377.enr:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:s377.enr:',    
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:s377.enr:',
+      :opencongress_link => nil,
       :link_type => "bill_text",
       :bill_ident => "s377", :congress=>104, :bill_version=>"enr"}    
+  end
+
+  def valid_bill_text_2
+    {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c111:H.R.3962.EH:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962.eh:',
+      :opencongress_link => 'http://www.opencongress.org/bill/111-h3962/text',
+      :link_type => "bill_text",
+      :bill_ident => "hr3962", :congress=>111, :bill_version=>nil}    
   end
 
   def valid_bill_text_multi
