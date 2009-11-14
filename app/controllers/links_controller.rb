@@ -18,6 +18,7 @@ class LinksController < ApplicationController
         render :action => :show
       else
         flash[:warning] = 'There was an issue trying to create your tinyThom.as URL.'
+        Prowler.notify "Invalid Create", @website_url, Prowler::Priority::NORMAL
         redirect_to :action => :invalid
       end
     else

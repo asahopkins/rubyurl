@@ -1,0 +1,46 @@
+*1.1.1 (August 4th, 2009)
+
+* Add support for verifying server certificate
+
+* Add support for passing multiple API keys
+
+
+*1.1.0 (July 10th, 2009)
+
+* Add support for Delayed::Job background processing
+
+* Update documentation for instance level configuration
+
+* Add support for instance level configuration
+
+* Add support for provider key
+
+* Clean up implementation
+
+* Remove unnecessary configuration
+
+* Remove deprecated API
+
+
+*1.0.3 (July 9th, 2009)
+
+* Add verify method for configured API key
+
+* Use POST to send notifications
+
+
+*1.0.2 (July 8th, 2009)
+
+* Switch to new API using apikey and deprecate old API
+
+
+*1.0.1 (July 7th, 2009)
+
+* Update RDoc documentation
+
+* Use Jeweler for gem management
+
+
+*1.0.0 (July 7th, 2009)
+
+* First release

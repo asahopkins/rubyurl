@@ -6,6 +6,7 @@ doc/api
 doc/app
 config/database.yml
 config/deploy.rb
+config/initializers/prowler.rb
 db/*.sqlite3
 db/schema.rb
 vendor/plugin/boxcar-conductor
