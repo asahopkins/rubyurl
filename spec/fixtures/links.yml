@@ -4,6 +4,7 @@ bill:
   token: bill
   permalink: 
   thomas_permalink: "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.2410:"
+  opencongress_link: "http://www.opencongress.org/bill/111-hr2410/show"
   congress: 111
   bill_ident: H.R.2410
   bill_title: 

@@ -21,6 +21,7 @@ describe "links/show" do
     @link.stub!(:permalink).and_return('http://localhost:3000/x093')
     @link.stub!(:website_url).and_return('http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
     @link.stub!(:thomas_permalink).and_return('http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
+    @link.stub!(:opencongress_link).and_return(nil)
     assigns[:link] = @link
     render 'links/show'
   end

@@ -56,11 +56,12 @@ module LinkSpecHelper
   end
   
   def valid_bill
-    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d110:S254:", 
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.3962:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.110s254',    
+      :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.111hr3962',
+      :opencongress_link => 'http://www.opencongress.org/bill/111-h3962/show',
       :link_type => "bill",
-      :bill_ident => "s254", :congress=>110}    
+      :bill_ident => "hr3962", :congress=>111}    
   end
   
   def valid_bill_text

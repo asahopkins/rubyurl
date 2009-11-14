@@ -10,7 +10,7 @@ class Link < ActiveRecord::Base
   validates_format_of :website_url, :with => /^http:\/\/(thomas|hdl).loc.gov\/[a-z0-9]/ix, :on => :save, :message => 'needs to start with http://thomas.loc.gov/', :if => Proc.new { |p| p.website_url? }
   
   before_create :generate_token
-  before_create :generate_thomas_permalink
+  # before_create :generate_thomas_permalink
   # before_create :generate_opencongress_permalink
   
   def flagged_as_spam?
@@ -24,6 +24,8 @@ class Link < ActiveRecord::Base
   end
   
   def Link.find_or_create_by_url(website_url)
+    l = Link.find_by_website_url(website_url)
+    return l if l
     ltype = Link.id_document_type(website_url)
     if ltype == "none"
       return Link.new
@@ -38,7 +40,7 @@ class Link < ActiveRecord::Base
           congress = website_url[n+2..n+4].to_i
           if (doc/"div#content"/"b")[0]
             bill_id = (doc/"div#content"/"b")[0].inner_html.downcase.gsub(/\./,"")
-            if bill_id[0..3] == "Item"
+            if bill_id[0..3] == "item"
               bill_id = (doc/"div#content"/"b")[1].inner_html.downcase.gsub(/\./,"")
             end
           else
@@ -167,7 +169,7 @@ class Link < ActiveRecord::Base
       if link.new_record?
         link.generate_token
         link.generate_thomas_permalink
-        # link.generate_opencongress_permalink        
+        link.generate_opencongress_permalink        
       end
       return link
     end    
@@ -239,9 +241,26 @@ class Link < ActiveRecord::Base
     end
   end
   
-  # def generate_opencongress_permalink
-  #   # TODO: calculate and provide a link to opencongress's info for bills
-  # end
+  def generate_opencongress_permalink
+    unless congress < 109
+      if link_type == "bill"
+        if m = bill_ident.match(/^(h|s)(re|j|c)/ix)
+          type_abbrev = "#{m[1]}#{m[2][0..0]}".downcase
+        elsif m = bill_ident.match(/^(HR|S)\d+/ix)
+          type_abbrev = m[1][0..0].downcase
+        else
+          # OpenCongress doesn't have pages for amendments (e.g. H.AMDT.1)
+          return
+        end
+
+        bill_num = bill_ident.gsub(/[^\d]+/, '')
+
+        self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
+      end
+    else
+      return
+    end
+  end
 
   private
     
