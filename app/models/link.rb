@@ -11,7 +11,7 @@ class Link < ActiveRecord::Base
   
   before_create :generate_token
   before_create :generate_thomas_permalink
-  before_create :generate_opencongress_permalink
+  # before_create :generate_opencongress_permalink
   
   def flagged_as_spam?
     self.spam_visits.empty? ? false : true
@@ -112,10 +112,44 @@ class Link < ActiveRecord::Base
         else
           return website_url
         end
-      when "bill_text"
+      when "bill_text" #TODO
         congress = website_url[n+2..n+4].to_i
-        # TODO        
-        return Link.new
+        if doc.inner_html =~ /cong_bills&docid=f:(h|s)(\w|\d)+\.txt\.pdf/
+          s = $&
+          s =~ /(h|s)(\w|\d)+/
+          t = $&
+          t =~ /[a-zA-Z]*$/
+          bill_version = $&
+          t =~ /^(h|s)[a-zA-Z]*\d+/
+          bill_ident = $&
+          m = (bill_ident =~ /\d+/)
+          bill_ident = Link.type_translate[bill_ident[0..m-1]]+bill_ident[m..-1]
+          link = Link.find_or_create_by_congress_and_bill_ident_and_link_type_and_bill_version(congress, bill_ident, ltype, bill_version)
+        elsif doc.inner_html =~ /a\shref="\/cgi-bin\/bdquery\/z\?d\d+:(s|h)(\w|\d|\.)+:">/ix
+          # TODO this section is not tested -- I'm not sure if there are bill text pages that don't have the PDF link but do have the summary and status link
+          s = $s
+          s =~ /(h|s)(\w|\d)+/
+          t = $&
+          t =~ /^(h|s)[a-zA-Z]*\d+/
+          bill_ident = $&
+          link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_ident, ltype)
+        elsif website_url =~ /F\?c/
+          link_text = ""
+          (doc/"div#content"/"a").each do |a|
+            if a.html.strip == "Contents Display"
+              link_text = a['href'].to_s
+              break
+            end
+          end
+          unless link_text == ""
+            new_url = "http://thomas.loc.gov"+link_text
+            link = Link.find_or_create_by_url(new_url)
+          else
+            return Link.new
+          end
+        else
+          return Link.new
+        end
       when "record_digest" # record_digests with other URL formats look like cong_records
         congress = website_url[n+2..n+4].to_i
         n = (website_url =~ /DDATE\+/)
@@ -127,7 +161,7 @@ class Link < ActiveRecord::Base
       if link.new_record?
         link.generate_token
         link.generate_thomas_permalink
-        link.generate_opencongress_permalink        
+        # link.generate_opencongress_permalink        
       end
       return link
     end    
@@ -159,7 +193,7 @@ class Link < ActiveRecord::Base
       end
     end
     return "bill" if website_url =~ /\/(z|D)\?d\d/
-    return "bill_text" if website_url =~ /\/(\d|z)\?c\d/
+    return "bill_text" if website_url =~ /\/(\d|z|D|F)\?c\d/
     return "cong_record" if website_url =~ /\/(z|C|D|R|F)\?r\d/
     return "nomination" if website_url =~ /\/(z|D)\?nomis/
     return "comm_report" if website_url =~ /\/(\d+|z|R)\?cp\d/
@@ -191,13 +225,17 @@ class Link < ActiveRecord::Base
     when "comm_report"
       self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/cpquery/z?cp"+congress.to_s+":"+report_ident+"."+congress.to_s+":"
     when "bill_text"
-      
+      if bill_version
+        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident+"."+bill_version+":"
+      else
+        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident+":"
+      end
     end
   end
   
-  def generate_opencongress_permalink
-    # TODO: calculate and provide a link to opencongress's info for bills
-  end
+  # def generate_opencongress_permalink
+  #   # TODO: calculate and provide a link to opencongress's info for bills
+  # end
 
   private
     
@@ -214,6 +252,10 @@ class Link < ActiveRecord::Base
         temp_token += characters[pos..pos]
       end
       temp_token
+    end
+    
+    def Link.type_translate
+      {"h"=>"hr","hr"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres","sc"=>"sconres","sj"=>"sjres","hj"=>"hjres"}
     end
     
 end

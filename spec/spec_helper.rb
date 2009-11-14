@@ -66,9 +66,9 @@ module LinkSpecHelper
   def valid_bill_text #TODO figure out how to get the particular version requested (enrolled, etc)
     {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c104:s.377.enr:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:S.377:',    
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:s377.enr:',    
       :link_type => "bill_text",
-      :nomination => "S.377", :congress=>104}    
+      :bill_ident => "s.377", :congress=>104, :bill_version=>"enr"}    
   end
   
   def valid_nomination
