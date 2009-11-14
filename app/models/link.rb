@@ -37,16 +37,16 @@ class Link < ActiveRecord::Base
         if n
           congress = website_url[n+2..n+4].to_i
           if (doc/"div#content"/"b")[0]
-            bill_id = (doc/"div#content"/"b")[0].inner_html
+            bill_id = (doc/"div#content"/"b")[0].inner_html.downcase.gsub(/\./,"")
             if bill_id[0..3] == "Item"
-              bill_id = (doc/"div#content"/"b")[1].inner_html
+              bill_id = (doc/"div#content"/"b")[1].inner_html.downcase.gsub(/\./,"")
             end
           else
             return website_url
           end
         elsif m #handle redirect
           congress = website_url[m+2..m+4].to_i
-          bill_id = website_url[m+5..-1].upcase
+          bill_id = website_url[m+5..-1].downcase.gsub(/\./,"")
         else
           return Link.new
         end
@@ -119,11 +119,11 @@ class Link < ActiveRecord::Base
           s =~ /(h|s)(\w|\d)+/
           t = $&
           t =~ /[a-zA-Z]*$/
-          bill_version = $&
+          bill_version = $&.downcase.gsub(/\./,"")
           t =~ /^(h|s)[a-zA-Z]*\d+/
           bill_ident = $&
           m = (bill_ident =~ /\d+/)
-          bill_ident = Link.type_translate[bill_ident[0..m-1]]+bill_ident[m..-1]
+          bill_ident = (Link.type_translate[bill_ident[0..m-1]]+bill_ident[m..-1]).downcase.gsub(/\./,"")
           link = Link.find_or_create_by_congress_and_bill_ident_and_link_type_and_bill_version(congress, bill_ident, ltype, bill_version)
         elsif doc.inner_html =~ /a\shref="\/cgi-bin\/bdquery\/z\?d\d+:(s|h)(\w|\d|\.)+:">/ix
           # TODO this section is not tested -- I'm not sure if there are bill text pages that don't have the PDF link but do have the summary and status link
@@ -131,7 +131,7 @@ class Link < ActiveRecord::Base
           s =~ /(h|s)(\w|\d)+/
           t = $&
           t =~ /^(h|s)[a-zA-Z]*\d+/
-          bill_ident = $&
+          bill_ident = $&.downcase.gsub(/\./,"")
           link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_ident, ltype)
         elsif website_url =~ /F\?c/
           link_text = ""
@@ -147,6 +147,12 @@ class Link < ActiveRecord::Base
           else
             return Link.new
           end
+        elsif website_url =~ /z\?c\d+:(h|s)(\w|.)*\d+:$/ix
+          # the url is already in permalink form
+          s = $& #"z?c111:H.R.3200:"
+          s =~ /(h|s)(\w|.)*\d+/ix
+          bill_ident = $&.downcase.gsub(/\./,"")
+          link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_ident, ltype)
         else
           return Link.new
         end

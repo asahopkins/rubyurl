@@ -60,15 +60,23 @@ module LinkSpecHelper
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.110s254',    
       :link_type => "bill",
-      :bill_ident => "S254", :congress=>110}    
+      :bill_ident => "s254", :congress=>110}    
   end
   
-  def valid_bill_text #TODO figure out how to get the particular version requested (enrolled, etc)
+  def valid_bill_text
     {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c104:s.377.enr:", 
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:s377.enr:',    
       :link_type => "bill_text",
-      :bill_ident => "s.377", :congress=>104, :bill_version=>"enr"}    
+      :bill_ident => "s377", :congress=>104, :bill_version=>"enr"}    
+  end
+
+  def valid_bill_text_multi
+    {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c111:H.R.3962:", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962:',    
+      :link_type => "bill_text",
+      :bill_ident => "h43962", :congress=>111, :bill_version=>nil}    
   end
   
   def valid_nomination
