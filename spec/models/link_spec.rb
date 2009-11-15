@@ -38,6 +38,16 @@ describe "Bill link " do
       @link.add_visit(request)
     end.should change(@link.visits, :count).by(1)
   end
+
+  it "should add a new OC visit with .add_visit" do
+    request = mock('request')
+    request.stub!(:remote_ip).and_return('127.0.0.1')
+    site = "oc"
+    lambda do
+      @link.add_visit(request, site)
+    end.should change(@link.visits, :count).by(1)
+  end
+
 end
 
 describe "Spammer site" do
@@ -109,6 +119,12 @@ describe Link, "a new link" do
     new_link.opencongress_link.should eql(@link.opencongress_link)
   end
 
+  it "should generate the correct govtrack link for a bill page" do
+    @link.attributes = valid_bill
+    new_link = Link.find_or_create_by_url(valid_bill[:website_url])
+    new_link.govtrack_link.should eql(@link.govtrack_link)
+  end
+
   it "should generate the correct thomas link for a bill text page" do
     @link.attributes = valid_bill_text
     new_link = Link.find_or_create_by_url(valid_bill_text[:website_url])
@@ -119,6 +135,15 @@ describe Link, "a new link" do
     @link.attributes = valid_bill_text_2
     new_link = Link.find_or_create_by_url(valid_bill_text_2[:website_url])
     new_link.opencongress_link.should eql(@link.opencongress_link)
+  end
+
+  it "should generate the correct govtrack link for a bill text page" do
+    @link.attributes = valid_bill_text_2
+    new_link = Link.find_or_create_by_url(valid_bill_text_2[:website_url])
+    new_link.govtrack_link.should eql(@link.govtrack_link)
+    @link.attributes = valid_bill_text
+    new_link = Link.find_or_create_by_url(valid_bill_text[:website_url])
+    new_link.govtrack_link.should eql(@link.govtrack_link)
   end
 
   it "should generate the correct thomas link for a bill text page with multiple versions listed" do

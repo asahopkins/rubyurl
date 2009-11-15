@@ -57,6 +57,15 @@ describe LinksController, "redirect routing" do
     get :redirect, :token => 'magoo'
     response.should redirect_to( :action => 'invalid' )
   end
+
+  it "should route /oc links to the redirect action in LinksController" do
+    assert_routing '/abc/oc', { :controller => 'links', :action => 'redirect', :token => 'abc', :site=>'oc' }
+  end
+
+  it "should route /gt links to the redirect action in LinksController" do
+    assert_routing '/abc/gt', { :controller => 'links', :action => 'redirect', :token => 'abc', :site=>'gt' }
+  end
+
 end
 
 describe LinksController, "redirect with token" do
@@ -71,5 +80,35 @@ describe LinksController, "redirect with token" do
   
   it "should call redirected to a website when passed a token" do
     response.should redirect_to( 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:' )
+  end
+end
+
+describe LinksController, "redirect to OpenCongress with token" do
+  
+  before(:each) do
+    @link = mock( 'oc_link' )
+    Link.should_receive( :find_by_token ).with( 'abcd' ).and_return( @link )
+    @link.stub!( :add_visit )
+    @link.should_receive( :opencongress_link ).and_return( 'http://www.opencongress.org/bill/111-h3962/text' )
+    get :redirect, :token => 'abcd', :site=>'oc'    
+  end
+  
+  it "should call redirected to a website when passed a token and /oc" do
+    response.should redirect_to( 'http://www.opencongress.org/bill/111-h3962/text' )
+  end
+end
+
+describe LinksController, "redirect to GovTrack with token" do
+  
+  before(:each) do
+    @link = mock( 'gt_link' )
+    Link.should_receive( :find_by_token ).with( 'abcd' ).and_return( @link )
+    @link.stub!( :add_visit )
+    @link.should_receive( :govtrack_link ).and_return( 'http://www.govtrack.us/congress/bill.xpd?bill=h111-3962' )
+    get :redirect, :token => 'abcd', :site=>'gt'    
+  end
+  
+  it "should call redirected to a website when passed a token and /gt" do
+    response.should redirect_to( 'http://www.govtrack.us/congress/bill.xpd?bill=h111-3962' )
   end
 end

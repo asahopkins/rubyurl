@@ -17,8 +17,9 @@ class Link < ActiveRecord::Base
     self.spam_visits.empty? ? false : true
   end
   
-  def add_visit(request)
+  def add_visit(request, site = "thomas")
     visit = visits.build(:ip_address => request.remote_ip)
+    visit.site = site
     visit.save
     return visit
   end
@@ -170,6 +171,7 @@ class Link < ActiveRecord::Base
         link.generate_token
         link.generate_thomas_permalink
         link.generate_opencongress_permalink        
+        link.generate_govtrack_link        
       end
       return link
     end    
@@ -222,8 +224,13 @@ class Link < ActiveRecord::Base
   def generate_thomas_permalink
     case link_type
     when "bill"
-#      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident+":"
-      self.thomas_permalink = "http://hdl.loc.gov/loc.uscongress/legislation."+congress.to_s+bill_ident.gsub(/\./,"").downcase
+      if congress > 109
+        self.thomas_permalink = "http://hdl.loc.gov/loc.uscongress/legislation."+congress.to_s+bill_ident.gsub(/\./,"").downcase
+      elsif bill_ident =~ /amdt/ix
+        self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":"
+      else
+        self.thomas_permalink = "http://hdl.loc.gov/loc.uscongress/legislation."+congress.to_s+bill_ident.gsub(/\./,"").downcase        
+      end
     when "nomination"
       self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:"+nomination+":"
     when "cong_record"
@@ -234,9 +241,9 @@ class Link < ActiveRecord::Base
       self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/cpquery/z?cp"+congress.to_s+":"+report_ident+"."+congress.to_s+":"
     when "bill_text"
       if bill_version
-        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident+"."+bill_version+":"
+        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+"."+bill_version+":"
       else
-        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident+":"
+        self.thomas_permalink ="http://thomas.loc.gov/cgi-bin/query/z?c"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":"
       end
     end
   end
@@ -258,6 +265,29 @@ class Link < ActiveRecord::Base
           self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
         elsif link_type == "bill_text"
           self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/text"          
+        end
+      end
+    else
+      return
+    end
+  end
+
+  def generate_govtrack_link
+    unless congress < 103
+      if link_type == "bill" or link_type == "bill_text"
+        if m = bill_ident.match(/^(h|s)(re|j|c)/ix)
+          type_abbrev = "#{m[1]}#{m[2][0..0]}".downcase
+        elsif m = bill_ident.match(/^(HR|S)\d+/ix)
+          type_abbrev = m[1][0..0].downcase
+        else
+          # GovTrack doesn't have pages for amendments (e.g. H.AMDT.1)
+          return
+        end
+        bill_num = bill_ident.gsub(/[^\d]+/, '')
+        if link_type == "bill"
+          self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}"
+        elsif link_type == "bill_text"
+          self.govtrack_link = "http://www.govtrack.us/congress/billtext.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}"          
         end
       end
     else

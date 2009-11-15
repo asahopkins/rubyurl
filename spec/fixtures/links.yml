@@ -6,7 +6,7 @@ bill:
   thomas_permalink: "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:H.R.2410:"
   opencongress_link: "http://www.opencongress.org/bill/111-hr2410/show"
   congress: 111
-  bill_ident: H.R.2410
+  bill_ident: hr2410
   bill_title: 
   link_type: bill
   nomination: 
@@ -20,8 +20,10 @@ bill_text:
   token: btxt
   permalink: 
   thomas_permalink: "http://thomas.loc.gov/cgi-bin/query/z?c111:H.R.2410.RFS:"
+  opencongress_link: "http://www.opencongress.org/bill/111-hr2410/text"
   congress: 111
-  bill_ident: H.R.2410.RFS
+  bill_ident: hr2410
+  bill_version: rfs
   bill_title: 
   link_type: bill_text
   nomination: 

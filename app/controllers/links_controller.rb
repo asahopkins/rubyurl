@@ -32,10 +32,16 @@ class LinksController < ApplicationController
 
   def redirect
     @link = Link.find_by_token( params[:token] )
-
+    params[:site] = "thomas" unless (params[:site] == "oc" or params[:site] == "gt")
     unless @link.nil?
-      @link.add_visit(request)
-      redirect_to @link.thomas_permalink, { :status => 301 }
+      @link.add_visit(request, params[:site])
+      if params[:site] == "oc" and oc_link = @link.opencongress_link
+        redirect_to oc_link, { :status => 301 }        
+      elsif params[:site] == "gt" and gt_link = @link.govtrack_link
+        redirect_to gt_link, { :status => 301 }
+      else
+        redirect_to @link.thomas_permalink, { :status => 301 }
+      end
     else
       redirect_to :action => 'invalid'
     end

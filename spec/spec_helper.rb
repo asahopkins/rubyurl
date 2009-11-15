@@ -60,8 +60,9 @@ module LinkSpecHelper
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://hdl.loc.gov/loc.uscongress/legislation.111hr3962',
       :opencongress_link => 'http://www.opencongress.org/bill/111-h3962/show',
+      :govtrack_link => 'http://www.govtrack.us/congress/bill.xpd?bill=h111-3962',
       :link_type => "bill",
-      :bill_ident => "hr3962", :congress=>111}    
+      :bill_ident => "hr3962", :congress=>111}
   end
   
   def valid_bill_text
@@ -69,6 +70,7 @@ module LinkSpecHelper
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c104:s377.enr:',
       :opencongress_link => nil,
+      :govtrack_link => 'http://www.govtrack.us/congress/billtext.xpd?bill=s104-377',
       :link_type => "bill_text",
       :bill_ident => "s377", :congress=>104, :bill_version=>"enr"}    
   end
@@ -78,14 +80,17 @@ module LinkSpecHelper
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962.eh:',
       :opencongress_link => 'http://www.opencongress.org/bill/111-h3962/text',
+      :govtrack_link => 'http://www.govtrack.us/congress/billtext.xpd?bill=h111-3962',
       :link_type => "bill_text",
-      :bill_ident => "hr3962", :congress=>111, :bill_version=>nil}    
+      :bill_ident => "hr3962", :congress=>111, :bill_version=>"eh"}    
   end
 
   def valid_bill_text_multi
     {:website_url => "http://thomas.loc.gov/cgi-bin/query/z?c111:H.R.3962:", 
       :ip_address => '192.168.1.1', 
-      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962:',    
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962:',  
+      :opencongress_link => 'http://www.opencongress.org/bill/111-h3962/text',
+      :govtrack_link => 'http://www.govtrack.us/congress/billtext.xpd?bill=h111-3962',  
       :link_type => "bill_text",
       :bill_ident => "h43962", :congress=>111, :bill_version=>nil}    
   end

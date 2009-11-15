@@ -19,9 +19,10 @@ describe "links/show" do
   before(:each) do
     @link = mock_model(Link)
     @link.stub!(:permalink).and_return('http://localhost:3000/x093')
-    @link.stub!(:website_url).and_return('http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
-    @link.stub!(:thomas_permalink).and_return('http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
-    @link.stub!(:opencongress_link).and_return(nil)
+    @link.stub!(:website_url).and_return('http://thomas.loc.gov/cgi-bin/query/z?c111:hr.3962.eh:')
+    @link.stub!(:thomas_permalink).and_return('http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962.eh:')
+    @link.stub!(:opencongress_link).and_return('http://www.opencongress.org/bill/111-h3962/text')
+    @link.stub!(:govtrack_link).and_return('http://www.govtrack.us/congress/billtext.xpd?bill=h111-3962')
     assigns[:link] = @link
     render 'links/show'
   end
@@ -31,11 +32,19 @@ describe "links/show" do
   end
 
   it "should display the submitted URL" do
-    response.should have_tag('dd', 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
+    response.should have_tag('dd', 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr.3962.eh:')
   end
 
   it "should display the Thomas permalink URL" do
-    response.should have_tag('dd', 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0014:')
+    response.should have_tag('dd', 'http://thomas.loc.gov/cgi-bin/query/z?c111:hr3962.eh:')
+  end
+
+  it "should display the OpenCongress URL" do
+    response.should have_tag('dd', 'http://www.opencongress.org/bill/111-h3962/text (also http://localhost:3000/x093/oc)')
+  end
+
+  it "should display the Govtrack URL" do
+    response.should have_tag('dd', 'http://www.govtrack.us/congress/billtext.xpd?bill=h111-3962 (also http://localhost:3000/x093/gt)')
   end
 
   it "should display a link for the user to copy" do
@@ -43,7 +52,7 @@ describe "links/show" do
     response.should have_tag('a', 'http://localhost:3000/x093')
   end
 
-  it "should display the correct number of characters for the original URL (55)" do
-    response.should have_tag('dd', '55 characters')
+  it "should display the correct number of characters for the original URL (54)" do
+    response.should have_tag('dd', '54 characters')
   end
 end

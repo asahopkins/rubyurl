@@ -28,6 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id.:format'
   map.connect ':controller/:action/:id'
   
+  map.connect ':token/oc', :controller => 'links', :action => 'redirect', :site=>'oc'
+  map.connect ':token/gt', :controller => 'links', :action => 'redirect', :site=>'gt'
   map.connect ':token', :controller => 'links', :action => 'redirect'
   
 end

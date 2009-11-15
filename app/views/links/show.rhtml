@@ -18,7 +18,10 @@
 			<dt id="thomas_url_label">Permanent Thomas Link:</dt><dd id="thomas_url"><%= link_to @link.thomas_permalink, @link.thomas_permalink -%></dd>
 			<dt id="original_url_label">Original URL:</dt><dd id="original_url"><%= link_to @link.website_url, @link.website_url -%></dd>
 			<% if @link.opencongress_link %>
-			   <dt id="opencongress_url_label">OpenCongress URL:</dt><dd id="opencongress_url"><%= link_to @link.opencongress_link, @link.opencongress_link -%></dd>
+			   <dt id="opencongress_url_label">OpenCongress URL:</dt><dd id="opencongress_url"><%= link_to @link.opencongress_link, @link.opencongress_link -%> (also <%= link_to @link.permalink+"/oc", @link.permalink+"/oc" -%>)</dd>
+			<% end %>
+			<% if @link.govtrack_link %>
+			   <dt id="govtrack_url_label">GovTrack URL:</dt><dd id="govtrack_url"><%= link_to @link.govtrack_link, @link.govtrack_link -%> (also <%= link_to @link.permalink+"/gt", @link.permalink+"/gt" -%>)</dd>
 			<% end %>
 		</dl>
 	</p>
