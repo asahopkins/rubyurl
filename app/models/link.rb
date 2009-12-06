@@ -36,7 +36,7 @@ class Link < ActiveRecord::Base
       n = (website_url =~ /\?/)
       m = (website_url =~ /n\./)
       case ltype
-      when "bill"
+      when "bill", "bill_all_info", "bill_titles", "bill_cosponsors", "bill_related", "bill_subjects", "bill_crs_summary", "bill_committees", "bill_major_actions", "bill_all_actions", "bill_all_actions_amend"
         if n
           congress = website_url[n+2..n+4].to_i
           if (doc/"div#content"/"b")[0]
@@ -53,6 +53,16 @@ class Link < ActiveRecord::Base
         else
           return Link.new
         end
+        link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
+      when "bill_amendments"
+        #TODO <h3>Amendments For H.R.3962</h3>
+        if (doc/"div#content"/"h3")[0]
+          (doc/"div#content"/"h3")[0].inner_html =~ /\S+\Z/
+          bill_id = $&.downcase.gsub(/\./,"")
+        else
+          return website_url
+        end
+        congress = website_url[n+2..n+4].to_i
         link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
       when "nomination"
         if doc.inner_html =~ /Control\s+Number:\s+<\/span>\w+/
@@ -202,7 +212,18 @@ class Link < ActiveRecord::Base
         return "bill"
       end
     end
-    return "bill" if website_url =~ /\/(z|D)\?d\d/
+    return "bill_all_info" if website_url =~ /\/(z|D)\?d\d.+[@]{3}L/
+    return "bill_related" if website_url =~ /\/(z|D)\?d\d.+[@]{3}K/
+    return "bill_titles" if website_url =~ /\/(z|D)\?d\d.+[@]{3}T/
+    return "bill_cosponsors" if website_url =~ /\/(z|D)\?d\d.+[@]{3}P/
+    return "bill_subjects" if website_url =~ /\/(z|D)\?d\d.+[@]{3}J/
+    return "bill_crs_summary" if website_url =~ /\/(z|D)\?d\d.+[@]{3}D/
+    return "bill_committees" if website_url =~ /\/(z|D)\?d\d.+[@]{3}C/
+    return "bill_major_actions" if website_url =~ /\/(z|D)\?d\d.+[@]{3}R/
+    return "bill_all_actions" if website_url =~ /\/(z|D)\?d\d.+[@]{3}X/
+    return "bill_all_actions_amend" if website_url =~ /\/(z|D)\?d\d.+[@]{3}S/
+    return "bill_amendments" if website_url =~ /\/L\?d\d.+Amendments_/
+    return "bill" if website_url =~ /\/(z|D)\?d\d.+[^@]{3}/
     return "bill_text" if website_url =~ /\/(\d|z|D|F)\?c\d/
     return "cong_record" if website_url =~ /\/(z|C|D|R|F)\?r\d/
     return "nomination" if website_url =~ /\/(z|D)\?nomis/
@@ -231,6 +252,28 @@ class Link < ActiveRecord::Base
       else
         self.thomas_permalink = "http://hdl.loc.gov/loc.uscongress/legislation."+congress.to_s+bill_ident.gsub(/\./,"").downcase        
       end
+    when "bill_amendments"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@L&summ2=m&#amendments"
+    when "bill_all_info"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@L&summ2=m&"
+    when "bill_related"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@K"
+    when "bill_titles"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@T"
+    when "bill_cosponsors"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@P"
+    when "bill_subjects"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@J"
+    when "bill_crs_summary"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@D&summ2=m&"
+    when "bill_committees"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@C"
+    when "bill_major_actions"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@R"
+    when "bill_all_actions"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@X"
+    when "bill_all_actions_amend"
+      self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/bdquery/z?d"+congress.to_s+":"+bill_ident.gsub(/\./,"").downcase+":@@@S"
     when "nomination"
       self.thomas_permalink = "http://thomas.loc.gov/cgi-bin/ntquery/z?nomis:"+nomination+":"
     when "cong_record"

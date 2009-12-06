@@ -111,8 +111,7 @@ module LinkSpecHelper
       :digest_date=> DateTime.civil(2009,11,7), :congress=>111}    
   end
   
-  def valid_comm_report
-    #"http://thomas.loc.gov/cgi-bin/cpquery/2?cp111:./temp/~TSOPfShsa&sid=TSOPfShsa&item=2&sel=TOCLIST&hd_count=197&xform_type=3&r_n=hr089.111&dbname=cp111&&maxdocs=500&variant=y&r_t=h&r_t=s&r_t=jc&refer=&&w_p=energy&attr=3&&"
+  def valid_comm_report    #"http://thomas.loc.gov/cgi-bin/cpquery/2?cp111:./temp/~TSOPfShsa&sid=TSOPfShsa&item=2&sel=TOCLIST&hd_count=197&xform_type=3&r_n=hr089.111&dbname=cp111&&maxdocs=500&variant=y&r_t=h&r_t=s&r_t=jc&refer=&&w_p=energy&attr=3&&"
     {:website_url => "http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:hr189.104:", 
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/cpquery/z?cp104:hr189.104:',    
@@ -124,6 +123,94 @@ module LinkSpecHelper
     valid_attributes
   end
   
+  def valid_bill_all_info
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@L&summ2=m&", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@L&summ2=m&',
+      :link_type => "bill_all_info",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+  
+  def valid_bill_related
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@K", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@K',
+      :link_type => "bill_related",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_titles
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@T", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@T',
+      :link_type => "bill_titles",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_cosponsors
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@P", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@P',
+      :link_type => "bill_cosponsors",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_amendments
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/L?d111:./temp/~bdau5fC:1[1-2](Amendments_For_H.R.3962)&./temp/~bdyzpG", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@L&summ2=m&#amendments',
+      :link_type => "bill_amendments",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_subjects
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@J", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@J',
+      :link_type => "bill_subjects",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_crs_summary
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@D&summ2=m&", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@D&summ2=m&',
+      :link_type => "bill_crs_summary",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_committees
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@C", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@C',
+      :link_type => "bill_committees",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_major_actions
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@R", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@R',
+      :link_type => "bill_committees",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_all_actions
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@X", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@X',
+      :link_type => "bill_committees",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
+  def valid_bill_all_actions_amend
+    {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@S", 
+      :ip_address => '192.168.1.1', 
+      :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@S',
+      :link_type => "bill_committees",
+      :bill_ident => "hr3962", :congress=>111}    
+  end
+
   def expired_website_url
     {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|"}    
   end

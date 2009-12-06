@@ -175,6 +175,76 @@ describe Link, "a new link" do
     new_link = Link.find_or_create_by_url(valid_cong_record[:website_url])
     new_link.thomas_permalink.should eql(@link.thomas_permalink)
   end
+
+  it "should generate the correct thomas link for a bill all information page" do
+    @link.attributes = valid_bill_all_info
+    new_link = Link.find_or_create_by_url(valid_bill_all_info[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+
+  it "should generate the correct thomas link for a bill related bills page" do
+    @link.attributes = valid_bill_related
+    new_link = Link.find_or_create_by_url(valid_bill_related[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill titles page" do
+    @link.attributes = valid_bill_titles
+    new_link = Link.find_or_create_by_url(valid_bill_titles[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill cosponsors page" do
+    @link.attributes = valid_bill_cosponsors
+    new_link = Link.find_or_create_by_url(valid_bill_cosponsors[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill amendments page" do
+    @link.attributes = valid_bill_amendments
+    base_url = 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:'
+    c = Curl::Easy.perform(base_url).body_str
+    doc = Hpricot(c)
+    amendments_url = "http://thomas.loc.gov"+(((doc/"div#content"/"tr")[2]/"td")[1]/"a")[0].attributes["href"]
+    new_link = Link.find_or_create_by_url(amendments_url)
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill subjects page" do
+    @link.attributes = valid_bill_subjects
+    new_link = Link.find_or_create_by_url(valid_bill_subjects[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill crs summary page" do
+    @link.attributes = valid_bill_crs_summary
+    new_link = Link.find_or_create_by_url(valid_bill_crs_summary[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill committees page" do
+    @link.attributes = valid_bill_committees
+    new_link = Link.find_or_create_by_url(valid_bill_committees[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill committees page" do
+    @link.attributes = valid_bill_major_actions
+    new_link = Link.find_or_create_by_url(valid_bill_major_actions[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill committees page" do
+    @link.attributes = valid_bill_all_actions
+    new_link = Link.find_or_create_by_url(valid_bill_all_actions[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
+  
+  it "should generate the correct thomas link for a bill committees page" do
+    @link.attributes = valid_bill_all_actions_amend
+    new_link = Link.find_or_create_by_url(valid_bill_all_actions_amend[:website_url])
+    new_link.thomas_permalink.should eql(@link.thomas_permalink)
+  end
   
   it "should flag expired Thomas links" do
     new_link = Link.find_or_create_by_url("http://thomas.loc.gov/cgi-bin/bdquery/D?d111:2:./temp/~bd5CYL::|/bss/|")

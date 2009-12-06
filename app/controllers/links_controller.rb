@@ -47,6 +47,10 @@ class LinksController < ApplicationController
     end
   end
   
+  def test
+    logger.debug params[:content]
+  end
+  
   private
   
   
