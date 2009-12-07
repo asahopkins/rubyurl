@@ -293,7 +293,8 @@ class Link < ActiveRecord::Base
   
   def generate_opencongress_permalink
     unless congress < 109
-      if link_type == "bill" or link_type == "bill_text"
+      oc_types = ["bill", "bill_text", "bill_all_info", "bill_crs_summary", "bill_major_actions", "bill_all_actions", "bill_all_actions_amend"]
+      if oc_types.include?(link_type)
         if m = bill_ident.match(/^(h|s)(re|j|c)/ix)
           type_abbrev = "#{m[1]}#{m[2][0..0]}".downcase
         elsif m = bill_ident.match(/^(HR|S)\d+/ix)
@@ -304,10 +305,13 @@ class Link < ActiveRecord::Base
         end
 
         bill_num = bill_ident.gsub(/[^\d]+/, '')
-        if link_type == "bill"
+        case link_type
+        when "bill", "bill_all_info", "bill_crs_summary"
           self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/show"
-        elsif link_type == "bill_text"
-          self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/text"          
+        when "bill_text"
+          self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/text"
+        when "bill_major_actions", "bill_all_actions", "bill_all_actions_amend"
+          self.opencongress_link = "http://www.opencongress.org/bill/#{congress.to_s}-#{type_abbrev}#{bill_num}/actions_votes"
         end
       end
     else
@@ -317,7 +321,8 @@ class Link < ActiveRecord::Base
 
   def generate_govtrack_link
     unless congress < 103
-      if link_type == "bill" or link_type == "bill_text"
+      gt_types = ["bill", "bill_text", "bill_all_info", "bill_committees", "bill_crs_summary", "bill_cosponsors", "bill_amendments", "bill_related"]
+      if gt_types.include?(link_type)
         if m = bill_ident.match(/^(h|s)(re|j|c)/ix)
           type_abbrev = "#{m[1]}#{m[2][0..0]}".downcase
         elsif m = bill_ident.match(/^(HR|S)\d+/ix)
@@ -327,10 +332,19 @@ class Link < ActiveRecord::Base
           return
         end
         bill_num = bill_ident.gsub(/[^\d]+/, '')
-        if link_type == "bill"
+        case link_type
+        when "bill", "bill_all_info", "bill_cosponsors"
           self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}"
-        elsif link_type == "bill_text"
-          self.govtrack_link = "http://www.govtrack.us/congress/billtext.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}"          
+        when "bill_text"
+          self.govtrack_link = "http://www.govtrack.us/congress/billtext.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}"
+        when "bill_crs_summary"
+          self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}&tab=summary"                    
+        when "bill_committees"
+          self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}&tab=committees"                    
+        when "bill_amendments"
+          self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}&tab=amendments"                    
+        when "bill_related"
+          self.govtrack_link = "http://www.govtrack.us/congress/bill.xpd?bill=#{type_abbrev}#{congress.to_s}-#{bill_num}&tab=related"                    
         end
       end
     else
