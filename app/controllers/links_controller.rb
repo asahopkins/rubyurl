@@ -34,7 +34,7 @@ class LinksController < ApplicationController
     @link = Link.find_by_token( params[:token] )
     unless @link
       @link = Link.find_or_create_by_bill( params[:token] )
-      if @link.new_record?
+      if @link and @link.new_record?
         @link.ip_address = request.remote_ip
         if @link.save
           calculate_links

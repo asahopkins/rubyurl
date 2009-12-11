@@ -90,6 +90,9 @@ describe LinksController, "redirect with bill number token" do
     Link.should_receive( :find_by_token ).with( 'hr001' ).and_return( nil )
     Link.should_receive( :find_or_create_by_bill ).with( 'hr001' ).and_return( @link )
     @link.stub!( :add_visit )
+    @link.should_receive( :new_record? ).and_return( true )
+    @link.should_receive( :ip_address= ).and_return( "0.0.0.0" )
+    @link.should_receive( :save ).and_return( @link )
     @link.should_receive( :thomas_permalink ).and_return( 'http://hdl.loc.gov/loc.uscongress/legislation.111hr1' )
     get :redirect, :token => 'hr001'    
   end
