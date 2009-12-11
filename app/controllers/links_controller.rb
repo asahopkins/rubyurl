@@ -32,6 +32,18 @@ class LinksController < ApplicationController
 
   def redirect
     @link = Link.find_by_token( params[:token] )
+    unless @link
+      @link = Link.find_or_create_by_bill( params[:token] )
+      if @link.new_record?
+        @link.ip_address = request.remote_ip
+        if @link.save
+          calculate_links
+        else
+          redirect_to :action => 'invalid'
+          return
+        end
+      end
+    end
     params[:site] = "thomas" unless (params[:site] == "oc" or params[:site] == "gt")
     unless @link.nil?
       @link.add_visit(request, params[:site])

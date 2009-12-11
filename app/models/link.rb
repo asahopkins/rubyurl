@@ -201,6 +201,38 @@ class Link < ActiveRecord::Base
     self.to_json( :only => [ :website_url, :permalink, :thomas_permalink ] )
   end
   
+  def Link.find_or_create_by_bill(bill_number)
+    bill_number = bill_number.to_s.downcase
+    if bill_number =~ /\A(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/
+      congress = 111 #TODO make this change with the current year
+      bill_number =~ /\A(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)/
+      bill_type = tt_type_expand[$&]
+      bill_number =~ /[1-9]\d{0,4}\Z/
+      bill_id = bill_type + $&
+      ltype = "bill"
+      link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
+    elsif bill_number =~ /\A(9[3-9]|10\d|11[0-1])(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/
+      bill_number =~ /\A(9[3-9]|10\d|11[0-1])/
+      congress = $&.to_i
+      bill_number =~ /(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)/
+      bill_type = tt_type_expand[$&]
+      bill_number =~ /[1-9]\d{0,4}\Z/
+      bill_id = bill_type + $&
+      ltype = "bill"
+      link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)      
+    else
+      return nil
+    end
+    if link.new_record?
+      link.generate_token
+      link.generate_thomas_permalink
+      link.website_url = link.thomas_permalink
+      link.generate_opencongress_permalink        
+      link.generate_govtrack_link        
+    end
+    return link
+  end
+  
   # possible return values: bill, bill_text, cong_record, comm_report, nomination, record_digest, none
   def Link.id_document_type(website_url)
     n = (website_url =~ /\?/)
@@ -234,7 +266,7 @@ class Link < ActiveRecord::Base
   end
 
   def generate_token
-    if (temp_token = random_token) and self.class.find_by_token(temp_token).nil?
+    if (temp_token = random_token) and self.class.find_by_token(temp_token).nil? and !(temp_token =~ /(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/)
       self.token = temp_token
       build_permalink
     else
@@ -367,6 +399,10 @@ class Link < ActiveRecord::Base
         temp_token += characters[pos..pos]
       end
       temp_token
+    end
+    
+    def Link.tt_type_expand
+      {"hr"=>"hr","hres"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres","sc"=>"sconres","sj"=>"sjres","hj"=>"hjres","sa"=>"samdt","ha"=>"hamdt"}
     end
     
     def Link.type_translate

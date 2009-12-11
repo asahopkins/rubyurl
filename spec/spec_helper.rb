@@ -191,7 +191,7 @@ module LinkSpecHelper
     {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@R", 
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@R',
-      :link_type => "bill_committees",
+      :link_type => "bill_major_actions",
       :bill_ident => "hr3962", :congress=>111}    
   end
 
@@ -199,7 +199,7 @@ module LinkSpecHelper
     {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@X", 
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@X',
-      :link_type => "bill_committees",
+      :link_type => "bill_all_actions",
       :bill_ident => "hr3962", :congress=>111}    
   end
 
@@ -207,7 +207,7 @@ module LinkSpecHelper
     {:website_url => "http://thomas.loc.gov/cgi-bin/bdquery/z?d111:HR03962:@@@S", 
       :ip_address => '192.168.1.1', 
       :thomas_permalink => 'http://thomas.loc.gov/cgi-bin/bdquery/z?d111:hr3962:@@@S',
-      :link_type => "bill_committees",
+      :link_type => "bill_all_actions_amend",
       :bill_ident => "hr3962", :congress=>111}    
   end
 

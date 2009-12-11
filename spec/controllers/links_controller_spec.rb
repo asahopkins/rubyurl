@@ -83,6 +83,22 @@ describe LinksController, "redirect with token" do
   end
 end
 
+describe LinksController, "redirect with bill number token" do
+  
+  before(:each) do
+    @link = mock( 'link' )
+    Link.should_receive( :find_by_token ).with( 'hr001' ).and_return( nil )
+    Link.should_receive( :find_or_create_by_bill ).with( 'hr001' ).and_return( @link )
+    @link.stub!( :add_visit )
+    @link.should_receive( :thomas_permalink ).and_return( 'http://hdl.loc.gov/loc.uscongress/legislation.111hr1' )
+    get :redirect, :token => 'hr001'    
+  end
+  
+  it "should call redirected to a website when passed a token" do
+    response.should redirect_to( 'http://hdl.loc.gov/loc.uscongress/legislation.111hr1' )
+  end
+end
+
 describe LinksController, "redirect to OpenCongress with token" do
   
   before(:each) do

@@ -309,6 +309,52 @@ describe "A new link" do
   end
 end
 
+describe "a link created from a bill number" do
+  fixtures :links
+  
+  it "should create the correct thomas_permalink" do
+    new_link = Link.find_or_create_by_bill('HR001')
+    new_link.link_type.should == "bill"
+    new_link.bill_ident.should == "hr1"
+    new_link.congress.should == 111
+    new_link.thomas_permalink.should == "http://hdl.loc.gov/loc.uscongress/legislation.111hr1"
+
+    new_link = Link.find_or_create_by_bill('105Ha10')
+    new_link.link_type.should == "bill"
+    new_link.bill_ident.should == "hamdt10"
+    new_link.congress.should == 105
+    new_link.thomas_permalink.should == "http://thomas.loc.gov/cgi-bin/bdquery/z?d105:hamdt10:"
+
+    new_link = Link.find_or_create_by_bill('110s1932')
+    new_link.link_type.should == "bill"
+    new_link.bill_ident.should == "s1932"
+    new_link.congress.should == 110
+    new_link.thomas_permalink.should == "http://hdl.loc.gov/loc.uscongress/legislation.110s1932"
+  end
+  
+  it "should return nil when the bill_number doesn't make sense" do
+    new_link = Link.find_or_create_by_bill('45s1932')
+    new_link.should be_nil
+    new_link = Link.find_or_create_by_bill('s1932d')
+    new_link.should be_nil
+    new_link = Link.find_or_create_by_bill('hr725364')
+    new_link.should be_nil
+  end
+
+  it "should create a new link when it doesn't already exist" do
+    new_link = Link.find_or_create_by_bill('HR001')
+    Link.find(:first,:conditions=>["congress=:cong AND bill_ident=:bill",{:cong=>new_link.congress, :bill=>new_link.bill_ident}]).should be_nil
+  end
+  
+  it "should use an existing link when it already exists" do
+    @link = Link.find(links(:bill).id)
+    new_link = Link.find_or_create_by_bill('HR2410')
+    @link.thomas_permalink.should == new_link.thomas_permalink
+    @link.id.should == new_link.id
+  end
+  
+end
+
 describe Link, 'to_api_xml' do
   before( :each ) do
     @link = Link.new( { :website_url => 'http://thomas.loc.gov/cgi-bin/query/z?r108:E26MR4-0015:', 
