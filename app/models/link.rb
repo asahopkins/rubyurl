@@ -55,7 +55,6 @@ class Link < ActiveRecord::Base
         end
         link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
       when "bill_amendments"
-        #TODO <h3>Amendments For H.R.3962</h3>
         if (doc/"div#content"/"h3")[0]
           (doc/"div#content"/"h3")[0].inner_html =~ /\S+\Z/
           bill_id = $&.downcase.gsub(/\./,"")
@@ -125,7 +124,7 @@ class Link < ActiveRecord::Base
         else
           return website_url
         end
-      when "bill_text" #TODO
+      when "bill_text"
         congress = website_url[n+2..n+4].to_i
         if doc.inner_html =~ /cong_bills&docid=f:(h|s)(\w|\d)+\.txt\.pdf/
           s = $&
@@ -204,15 +203,15 @@ class Link < ActiveRecord::Base
   def Link.find_or_create_by_bill(bill_number)
     bill_number = bill_number.to_s.downcase
     if bill_number =~ /\A(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/
-      congress = 111 #TODO make this change with the current year
+      congress = ((Time.now.year+0.5)/2).round - 894
       bill_number =~ /\A(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)/
       bill_type = tt_type_expand[$&]
       bill_number =~ /[1-9]\d{0,4}\Z/
       bill_id = bill_type + $&
       ltype = "bill"
       link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
-    elsif bill_number =~ /\A(9[3-9]|10\d|11[0-1])(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/
-      bill_number =~ /\A(9[3-9]|10\d|11[0-1])/
+    elsif bill_number =~ /\A(9[3-9]|1[0-1]\d)(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)0*[1-9]\d{0,4}\Z/
+      bill_number =~ /\A(9[3-9]|1[0-1]\d)/
       congress = $&.to_i
       bill_number =~ /(hr|hres|hc|hj|ha|s|sr|sc|sj|sa)/
       bill_type = tt_type_expand[$&]
@@ -402,11 +401,15 @@ class Link < ActiveRecord::Base
     end
     
     def Link.tt_type_expand
-      {"hr"=>"hr","hres"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres","sc"=>"sconres","sj"=>"sjres","hj"=>"hjres","sa"=>"samdt","ha"=>"hamdt"}
+      {"hr"=>"hr","hres"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres",
+        "sc"=>"sconres","sj"=>"sjres","hj"=>"hjres","sa"=>"samdt",
+        "ha"=>"hamdt","hamdt"=>"hamdt","samdt"=>"samdt","h"=>"hr",
+        "hconres"=>"hconres","sconres"=>"sconres","hjres"=>"hjres", "sjres"=>"sjres"}
     end
     
     def Link.type_translate
-      {"h"=>"hr","hr"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres","sc"=>"sconres","sj"=>"sjres","hj"=>"hjres"}
+      {"h"=>"hr","hr"=>"hres","s"=>"s","hc"=>"hconres","sr"=>"sres","sc"=>"sconres",
+        "sj"=>"sjres","hj"=>"hjres"}
     end
     
 end
