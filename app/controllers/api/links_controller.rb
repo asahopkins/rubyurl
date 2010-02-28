@@ -6,9 +6,11 @@ class Api::LinksController < Api::BaseController
       website_url = params[:website_url]
     end
     @link = Link.find_or_create_by_url( website_url )
-    @link.ip_address = request.remote_ip if @link.new_record?      
-
-    if @link.save        
+    if @link.class == Link and @link.new_record?
+      @link.ip_address = request.remote_ip       
+    end
+    
+    if @link.class == Link and @link.save        
       respond_to do |format|
         format.xml { render :xml => @link.to_api_xml }
         format.json { render :json => @link.to_api_json }        

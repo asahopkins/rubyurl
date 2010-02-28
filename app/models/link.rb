@@ -126,12 +126,22 @@ class Link < ActiveRecord::Base
         end
       when "bill_text"
         congress = website_url[n+2..n+4].to_i
+        if doc.inner_html =~ /There are \d versions of Bill/
+          # multiple versions
+          multi = true
+        else
+          multi = false
+        end
         if doc.inner_html =~ /cong_bills&docid=f:(h|s)(\w|\d)+\.txt\.pdf/
           s = $&
           s =~ /(h|s)(\w|\d)+/
           t = $&
           t =~ /[a-zA-Z]*$/
-          bill_version = $&.downcase.gsub(/\./,"")
+          if multi
+            bill_version = nil
+          else
+            bill_version = $&.downcase.gsub(/\./,"")
+          end
           t =~ /^(h|s)[a-zA-Z]*\d+/
           bill_ident = $&
           m = (bill_ident =~ /\d+/)
@@ -202,18 +212,18 @@ class Link < ActiveRecord::Base
   
   def Link.find_or_create_by_bill(bill_number)
     bill_number = bill_number.to_s.downcase
-    if bill_number =~ /\A(h|hres|hconres|hjres|hr|hres|hc|hj|ha|hamdt|s|sres|sconres|sjres|sr|sc|sj|sa|samdt)0*[1-9]\d{0,4}\Z/
+    if bill_number =~ /\A(hres|hconres|hjres|hr|hc|hj|hamdt|ha|h|sres|sconres|sjres|sr|sc|sj|samdt|sa|s)0*[1-9]\d{0,4}\Z/
       congress = ((Time.now.year+0.5)/2).round - 894
-      bill_number =~ /\A(h|hres|hconres|hjres|hr|hres|hc|hj|ha|hamdt|s|sres|sconres|sjres|sr|sc|sj|sa|samdt)/
+      bill_number =~ /\A(hres|hconres|hjres|hr|hc|hj|hamdt|ha|h|sres|sconres|sjres|sr|sc|sj|samdt|sa|s)/
       bill_type = tt_type_expand[$&]
       bill_number =~ /[1-9]\d{0,4}\Z/
       bill_id = bill_type + $&
       ltype = "bill"
       link = Link.find_or_create_by_congress_and_bill_ident_and_link_type(congress, bill_id, ltype)
-    elsif bill_number =~ /\A(9[3-9]|1[0-1]\d)(h|hres|hconres|hjres|hr|hres|hc|hj|ha|hamdt|s|sres|sconres|sjres|sr|sc|sj|sa|samdt)0*[1-9]\d{0,4}\Z/
+    elsif bill_number =~ /\A(9[3-9]|1[0-1]\d)(hres|hconres|hjres|hr|hc|hj|hamdt|ha|h|sres|sconres|sjres|sr|sc|sj|samdt|sa|s)0*[1-9]\d{0,4}\Z/
       bill_number =~ /\A(9[3-9]|1[0-1]\d)/
       congress = $&.to_i
-      bill_number =~ /(h|hres|hconres|hjres|hr|hres|hc|hj|ha|hamdt|s|sres|sconres|sjres|sr|sc|sj|sa|samdt)/
+      bill_number =~ /(hres|hconres|hjres|hr|hc|hj|hamdt|ha|h|sres|sconres|sjres|sr|sc|sj|samdt|sa|s)/
       bill_type = tt_type_expand[$&]
       bill_number =~ /[1-9]\d{0,4}\Z/
       bill_id = bill_type + $&
@@ -265,7 +275,7 @@ class Link < ActiveRecord::Base
   end
 
   def generate_token
-    if (temp_token = random_token) and self.class.find_by_token(temp_token).nil? and !(temp_token =~ /(h|hres|hconres|hjres|hr|hres|hc|hj|ha|hamdt|s|sres|sconres|sjres|sr|sc|sj|sa|samdt)0*[1-9]\d{0,4}\Z/)
+    if (temp_token = random_token) and self.class.find_by_token(temp_token).nil? and !(temp_token =~ /(hres|hconres|hjres|hres|hr|hc|hj|hamdt|ha|h|sres|sconres|sjres|sr|sc|sj|samdt|sa|s)0*[1-9]\d{0,4}\Z/)
       self.token = temp_token
       build_permalink
     else
