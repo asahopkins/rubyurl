@@ -7,7 +7,7 @@ class Link < ActiveRecord::Base
   validates_presence_of :website_url, :ip_address, :link_type, :thomas_permalink
   validates_uniqueness_of :website_url, :token  
   # validates_format_of :website_url, :with => /^(http|https):\/\/[a-z0-9]/ix, :on => :save, :message => 'needs to have http(s):// in front of it', :if => Proc.new { |p| p.website_url? }
-  validates_format_of :website_url, :with => /^http:\/\/(thomas|hdl).loc.gov\/[a-z0-9]/ix, :on => :save, :message => 'needs to start with http://thomas.loc.gov/', :if => Proc.new { |p| p.website_url? }
+  validates_format_of :website_url, :with => /^http:\/\/((thomas|hdl).loc|www.thomas).gov\/[a-z0-9]/ix, :on => :save, :message => 'needs to start with http://thomas.loc.gov/', :if => Proc.new { |p| p.website_url? }
   
   before_create :generate_token
   # before_create :generate_thomas_permalink
@@ -244,6 +244,9 @@ class Link < ActiveRecord::Base
   
   # possible return values: bill, bill_text, cong_record, comm_report, nomination, record_digest, none
   def Link.id_document_type(website_url)
+    unless website_url =~ /^http:\/\/((thomas|hdl).loc|www.thomas).gov\/[a-z0-9]/ix
+      return "none"
+    end
     n = (website_url =~ /\?/)
     if n.nil? or n == false
       n = (website_url =~ /hdl.loc.gov\/loc.uscongress\/legislation/)
