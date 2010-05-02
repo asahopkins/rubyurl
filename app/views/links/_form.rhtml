@@ -4,6 +4,7 @@
   <%= f.text_field :website_url %>
   
   <%= submit_tag 'Go!', :class => 'go' -%></p>
-  <p><br />If you know the bill number you want to link to (eg. H.R. 3201), you can also make a direct link like this: <a href="http://tinythom.as/hr3201">http://tinythom.as/hr3201</a>. (If you want to make sure the correct session of Congress is referenced, use <a href="http://tinythom.as/111hr3201">http://tinythom.as/111hr3201</a> for the 111th Congress.)</p>
+  <p><br />tinyThom.as knows how to handle bill pages (along with their various sub-pages, including the bill text), plus the Congressional Record, committee reports, and presidential nominations. <%= link_to "Learn more", :action=>"about" %>.</p>
+<p>For bills, if you know the bill number you want to link to (eg. H.R. 3201), you can also make a link like this: <a href="http://tinythom.as/hr3201">http://tinythom.as/hr3201</a> without using the form above. (If you want to make sure the correct session of Congress is referenced, use <a href="http://tinythom.as/111hr3201">http://tinythom.as/111hr3201</a> for the 111th Congress.)</p>
 <% end %>
 
