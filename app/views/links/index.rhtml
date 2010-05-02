@@ -13,3 +13,27 @@
   </div> <!-- /bookmarklet_instructions -->
   <p>Add tinyThoma.as to your favorite browser by dragging the bookmarklet (the link in the blue area) to the <strong>bookmark toolbar</strong> of your browser and create tinyThom.as URLs on the fly!</p>
 </div><!-- end app_content -->
+<div id="stats">
+	<strong>The five most recent tinyThom.as links:</strong>
+	<ol>
+		<% @recent_links.each do |link| -%><li><%= link_to link.permalink, link.permalink %>:  
+		<% if link.link_type[0..3] == "bill" -%><%= link.link_type.titleize %>, <%= link.bill_ident.upcase %> in the <%= link.congress.ordinalize %> Congress
+		<% elsif link.link_type == "cong_record" -%>Congressional Record, page <%= link.cr_page %> in the <%= link.congress.ordinalize %> Congress
+		<% elsif link.link_type == "comm_report" -%><% if link.report_ident[0..1]=="hr" -%>House<% else %>Senate<% end %> Committee Report <%= link.congress %>-<%= link.report_ident[2..-1] %> 
+		<% elsif link.link_type == "record_digest" -%>Congressional Record daily digest for <%= link.digest_date.strftime('%b %d, %Y') %>
+		<% elsif link.link_type == "nomination" -%><%= link.link_type.humanize %>, id: <%= link.nomination %>, in the <%= link.congress.ordinalize %> Congress
+		<% end -%> 
+		</li><% end -%>
+	</ol>
+	<strong>The five most visited tinyThom.as links:</strong>
+	<ol>
+		<% @visited_links.each do |link| -%><li><%= link_to link.permalink, link.permalink %>:  
+		<% if link.link_type[0..3] == "bill" -%><%= link.link_type.titleize %>, <%= link.bill_ident.upcase %> in the <%= link.congress.ordinalize %> Congress
+		<% elsif link.link_type == "cong_record" -%>Congressional Record, page <%= link.cr_page %> in the <%= link.congress.ordinalize %> Congress
+		<% elsif link.link_type == "comm_report" -%><% if link.report_ident[0..1]=="hr" -%>House<% else %>Senate<% end %> Committee Report <%= link.congress %>-<%= link.report_ident[2..-1] %> 
+		<% elsif link.link_type == "record_digest" -%>Congressional Record daily digest for <%= link.digest_date.strftime('%b %d, %Y') %>
+		<% elsif link.link_type == "nomination" -%><%= link.link_type.humanize %>, id: <%= link.nomination %>, in the <%= link.congress.ordinalize %> Congress
+		<% end -%> 
+		</li><% end -%>
+	</ol>
+</div><!-- end stats -->

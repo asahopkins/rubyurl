@@ -2,6 +2,12 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "links/index" do
   before(:each) do
+    @recent_links = mock_model(Array)
+    @recent_links.stub!(:each).and_return(nil) #TODO deal with this to test display of different types of links
+    assigns[:recent_links] = @recent_links
+    @visited_links = mock_model(Array)
+    @visited_links.stub!(:each).and_return(nil) #TODO deal with this to test display of different types of links
+    assigns[:visited_links] = @visited_links
     render 'links/index'
   end
 

@@ -4,6 +4,8 @@ class LinksController < ApplicationController
 
   def index  
     @link = Link.new
+    @recent_links = Link.find(:all,:limit=>5,:order=>"created_at DESC")
+    @visited_links = Link.find(:all,:limit=>5,:order=>"visits_count DESC")
     render :action => 'index'
   end
   
